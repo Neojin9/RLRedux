@@ -1,8 +1,11 @@
-using System.Collections.Generic;
-using System.Globalization;
+using DS2DEngine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using Tweener;
+using Tweener.Ease;
 
 namespace RogueCastle {
     internal class EndingRoomObj : RoomObj {

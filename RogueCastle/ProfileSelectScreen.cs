@@ -1,5 +1,9 @@
 using System.Collections.Generic;
+using DS2DEngine;
+using InputSystem;
 using Microsoft.Xna.Framework;
+using Tweener;
+using Tweener.Ease;
 
 
 namespace RogueCastle {

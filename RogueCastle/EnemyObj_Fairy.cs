@@ -1,6 +1,9 @@
 using System.Collections.Generic;
+using DS2DEngine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
+using Tweener;
+using Tweener.Ease;
 
 
 namespace RogueCastle {

@@ -1,3 +1,6 @@
+using DS2DEngine;
+
+
 namespace RogueCastle {
     public class LightSourceObj : SpriteObj {
         private float m_growthDifference;

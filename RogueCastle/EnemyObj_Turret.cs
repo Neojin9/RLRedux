@@ -1,4 +1,5 @@
 using System;
+using DS2DEngine;
 using Microsoft.Xna.Framework;
 
 
@@ -98,17 +99,7 @@ namespace RogueCastle {
         }
 
         protected override void RunBasicLogic() {
-            switch (base.State) {
-                case 0:
-                case 1:
-                case 2:
-                case 3:
-                    base.RunLogicBlock(false, m_generalBasicLB, new[] {
-                        100
-                    });
-                    return;
-            }
-            goto IL_1D;
+            RunLogicBlock(false, m_generalBasicLB, new[] {100});
         }
 
         protected override void RunAdvancedLogic() {

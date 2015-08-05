@@ -1,6 +1,10 @@
+using DS2DEngine;
+using InputSystem;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+using Tweener;
+using Tweener.Ease;
 
 
 namespace RogueCastle {
@@ -217,9 +221,11 @@ namespace RogueCastle {
             foreach (OptionsObj current in m_optionsArray) {
                 current.Y = (float)(160 + num * 30);
                 current.Opacity = 1f;
+
+                // TODO Check Decompile Error - -360f.ToString()
                 Tween.By(current, 0.5f, new Easing(Quad.EaseOut), new[] {
                     "Y",
-                    -360f.ToString()
+                    (-360f).ToString()
                 });
                 Tween.To(current, 0.2f, new Easing(Tween.EaseNone), new[] {
                     "Opacity",

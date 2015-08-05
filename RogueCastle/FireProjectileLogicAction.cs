@@ -1,3 +1,6 @@
+using DS2DEngine;
+
+
 namespace RogueCastle {
     public class FireProjectileLogicAction : LogicAction {
         private ProjectileData m_data;

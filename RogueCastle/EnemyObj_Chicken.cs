@@ -1,3 +1,4 @@
+using DS2DEngine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -156,7 +157,6 @@ namespace RogueCastle {
                     });
                     return;
             }
-            goto IL_1D;
         }
 
         protected override void RunAdvancedLogic() {
@@ -171,7 +171,6 @@ namespace RogueCastle {
                     });
                     return;
             }
-            goto IL_1D;
         }
 
         protected override void RunExpertLogic() {
@@ -186,7 +185,6 @@ namespace RogueCastle {
                     });
                     return;
             }
-            goto IL_1D;
         }
 
         protected override void RunMinibossLogic() {
@@ -201,7 +199,6 @@ namespace RogueCastle {
                     });
                     return;
             }
-            goto IL_1D;
         }
 
         public void MakeCollideable() {

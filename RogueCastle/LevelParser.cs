@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.Xml;
+using DS2DEngine;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 

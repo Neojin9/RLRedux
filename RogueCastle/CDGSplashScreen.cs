@@ -1,6 +1,9 @@
+using DS2DEngine;
+using Microsoft.Xna.Framework;
 using System;
 using System.Threading;
-using Microsoft.Xna.Framework;
+using Tweener;
+using Tweener.Ease;
 
 
 namespace RogueCastle {

@@ -1,3 +1,4 @@
+using DS2DEngine;
 using Microsoft.Xna.Framework;
 
 
@@ -47,7 +48,6 @@ namespace RogueCastle {
                     base.IsCollidable = false;
                     return;
             }
-            goto IL_F5;
         }
 
         protected override void InitializeLogic() {

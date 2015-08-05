@@ -1,8 +1,12 @@
 using System;
 using System.Collections.Generic;
+using DS2DEngine;
+using InputSystem;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
+using Tweener;
+using Tweener.Ease;
 
 
 namespace RogueCastle {
@@ -325,8 +329,7 @@ namespace RogueCastle {
                         Spell = m_currentBranchArray[i].Spell,
                         Traits = m_currentBranchArray[i].Traits,
                         Age = m_currentBranchArray[i].Age,
-                        ChildAge = m_currentBranchArray[i].ChildAge,
-                        IsFemale = m_currentBranchArray[i].IsFemale
+                        ChildAge = m_currentBranchArray[i].ChildAge
                     });
                 }
                 Game.PlayerStats.CurrentBranches = list;

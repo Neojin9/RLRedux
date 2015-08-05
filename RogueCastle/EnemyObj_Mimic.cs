@@ -1,3 +1,4 @@
+using DS2DEngine;
 using Microsoft.Xna.Framework;
 
 
@@ -175,7 +176,6 @@ namespace RogueCastle {
                     });
                     return;
             }
-            goto IL_1D;
         }
 
         protected override void RunAdvancedLogic() {
@@ -198,7 +198,6 @@ namespace RogueCastle {
                     });
                     return;
             }
-            goto IL_1D;
         }
 
         protected override void RunExpertLogic() {
@@ -221,7 +220,6 @@ namespace RogueCastle {
                     });
                     return;
             }
-            goto IL_1D;
         }
 
         protected override void RunMinibossLogic() {
@@ -244,7 +242,6 @@ namespace RogueCastle {
                     });
                     return;
             }
-            goto IL_1D;
         }
 
         public override void HitEnemy(int damage, Vector2 collisionPt, bool isPlayer) {

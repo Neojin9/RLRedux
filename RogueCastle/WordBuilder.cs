@@ -1,3 +1,6 @@
+using DS2DEngine;
+
+
 namespace RogueCastle {
     public class WordBuilder {
         private static string[] intro = new[] {

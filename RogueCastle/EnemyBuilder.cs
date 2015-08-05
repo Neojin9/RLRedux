@@ -1,3 +1,6 @@
+using DS2DEngine;
+
+
 namespace RogueCastle {
     public class EnemyBuilder {
         public static EnemyObj BuildEnemy(int enemyType, PlayerObj player, PhysicsManager physicsManager, ProceduralLevelScreen levelToAttachTo, GameTypes.EnemyDifficulty difficulty, bool doNotInitialize = false) {

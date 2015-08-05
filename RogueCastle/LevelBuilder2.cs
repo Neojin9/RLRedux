@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using DS2DEngine;
 using Microsoft.Xna.Framework;
 
 
@@ -1041,10 +1042,6 @@ namespace RogueCastle {
                 byte[] array;
                 byte[] array2;
                 switch (current.LevelType) {
-                    case GameTypes.LevelType.CASTLE:
-                        array = LevelEV.CASTLE_ENEMY_LIST;
-                        array2 = LevelEV.CASTLE_ENEMY_DIFFICULTY_LIST;
-                        goto IL_7D;
                     case GameTypes.LevelType.GARDEN:
                         array = LevelEV.GARDEN_ENEMY_LIST;
                         array2 = LevelEV.GARDEN_ENEMY_DIFFICULTY_LIST;
@@ -1057,8 +1054,11 @@ namespace RogueCastle {
                         array = LevelEV.TOWER_ENEMY_LIST;
                         array2 = LevelEV.TOWER_ENEMY_DIFFICULTY_LIST;
                         goto IL_7D;
+                    default:
+                        array = LevelEV.CASTLE_ENEMY_LIST;
+                        array2 = LevelEV.CASTLE_ENEMY_DIFFICULTY_LIST;
+                        goto IL_7D;
                 }
-                goto IL_47;
                 IL_7D:
                 if (array.Length != array2.Length)
                     throw new Exception("Cannot create enemy. Enemy pool != enemy difficulty pool - LevelBuilder2.cs - AddProceduralEnemies()");
@@ -1829,8 +1829,6 @@ namespace RogueCastle {
 
         public static List<RoomObj>[,] GetLevelTypeRoomArray(GameTypes.LevelType levelType) {
             switch (levelType) {
-                case GameTypes.LevelType.NONE:
-                    throw new Exception("Cannot create level of type NONE");
                 case GameTypes.LevelType.CASTLE:
                     return LevelBuilder2.m_castleRoomArray;
                 case GameTypes.LevelType.GARDEN:
@@ -1839,8 +1837,9 @@ namespace RogueCastle {
                     return LevelBuilder2.m_dungeonRoomArray;
                 case GameTypes.LevelType.TOWER:
                     return LevelBuilder2.m_towerRoomArray;
+                default:
+                    throw new Exception("Cannot create level of type NONE");
             }
-            goto IL_1C;
         }
 
         public static void IndexRoomList() {

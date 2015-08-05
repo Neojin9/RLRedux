@@ -1,7 +1,8 @@
+using DS2DEngine;
+using Microsoft.Xna.Framework;
 using System;
 using System.Globalization;
 using System.Xml;
-using Microsoft.Xna.Framework;
 
 
 namespace RogueCastle {

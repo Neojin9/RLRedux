@@ -1,3 +1,6 @@
+using DS2DEngine;
+
+
 namespace RogueCastle {
     public class DeleteSaveOptionsObj : OptionsObj {
         public DeleteSaveOptionsObj(OptionsScreen parentScreen) : base(parentScreen, "Delete Save") {}

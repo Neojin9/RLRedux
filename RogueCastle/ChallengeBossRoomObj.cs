@@ -1,6 +1,10 @@
-using System.Collections.Generic;
+using DS2DEngine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
+using Tweener;
+using Tweener.Ease;
 
 
 namespace RogueCastle {

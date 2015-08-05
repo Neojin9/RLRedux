@@ -1,3 +1,6 @@
+using DS2DEngine;
+
+
 namespace RogueCastle {
     public class WaypointObj : GameObj {
         public int OrbType;

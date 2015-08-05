@@ -1,3 +1,6 @@
+using DS2DEngine;
+
+
 namespace RogueCastle {
     public class JumpLogicAction : LogicAction {
         private float m_overriddenHeight;

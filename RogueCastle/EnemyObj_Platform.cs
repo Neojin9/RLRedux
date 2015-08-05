@@ -1,4 +1,6 @@
+using DS2DEngine;
 using Microsoft.Xna.Framework;
+using Tweener;
 
 
 namespace RogueCastle {
@@ -51,7 +53,6 @@ namespace RogueCastle {
                     }
                     return;
             }
-            goto IL_DE;
         }
 
         public override void Update(GameTime gameTime) {

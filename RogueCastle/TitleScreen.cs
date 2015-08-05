@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using DS2DEngine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Randomchaos2DGodRays;
+using Tweener;
+using Tweener.Ease;
 
 
 namespace RogueCastle {
