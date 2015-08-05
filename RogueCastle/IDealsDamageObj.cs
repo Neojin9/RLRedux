@@ -1,11 +1,5 @@
-using System;
-namespace RogueCastle
-{
-	public interface IDealsDamageObj
-	{
-		int Damage
-		{
-			get;
-		}
-	}
+namespace RogueCastle {
+    public interface IDealsDamageObj {
+        int Damage { get; }
+    }
 }

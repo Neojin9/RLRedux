@@ -1,18 +1,17 @@
 using Microsoft.Xna.Framework;
-using System;
-namespace RogueCastle
-{
-	public struct PlayerLineageData
-	{
-		public string Name;
-		public byte Spell;
-		public byte Class;
-		public byte Age;
-		public byte ChildAge;
-		public bool IsFemale;
-		public byte HeadPiece;
-		public byte ChestPiece;
-		public byte ShoulderPiece;
-		public Vector2 Traits;
-	}
+
+
+namespace RogueCastle {
+    public struct PlayerLineageData {
+        public byte Age;
+        public byte ChestPiece;
+        public byte ChildAge;
+        public byte Class;
+        public byte HeadPiece;
+        public bool IsFemale;
+        public string Name;
+        public byte ShoulderPiece;
+        public byte Spell;
+        public Vector2 Traits;
+    }
 }

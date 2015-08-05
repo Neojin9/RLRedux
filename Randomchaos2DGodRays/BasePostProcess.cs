@@ -1,42 +1,36 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-namespace Randomchaos2DGodRays
-{
-	public class BasePostProcess
-	{
-		public Vector2 HalfPixel;
-		public Texture2D BackBuffer;
-		public Texture2D orgBuffer;
-		public bool Enabled = true;
-		protected Effect effect;
-		protected Game Game;
-		public RenderTarget2D newScene;
-		private ScreenQuad sq;
-		public bool UsesVertexShader;
-		protected SpriteBatch spriteBatch
-		{
-			get
-			{
-				return (SpriteBatch)this.Game.Services.GetService(typeof(SpriteBatch));
-			}
-		}
-		public BasePostProcess(Game game)
-		{
-			this.Game = game;
-		}
-		public virtual void Draw(GameTime gameTime)
-		{
-			if (this.Enabled)
-			{
-				if (this.sq == null)
-				{
-					this.sq = new ScreenQuad(this.Game);
-					this.sq.Initialize();
-				}
-				this.effect.CurrentTechnique.Passes[0].Apply();
-				this.sq.Draw();
-			}
-		}
-	}
+
+
+namespace Randomchaos2DGodRays {
+    public class BasePostProcess {
+        public Texture2D BackBuffer;
+        public bool Enabled = true;
+        protected Game Game;
+        public Vector2 HalfPixel;
+        public bool UsesVertexShader;
+        protected Effect effect;
+        public RenderTarget2D newScene;
+        public Texture2D orgBuffer;
+        private ScreenQuad sq;
+
+        public BasePostProcess(Game game) {
+            Game = game;
+        }
+
+        protected SpriteBatch spriteBatch {
+            get { return (SpriteBatch)Game.Services.GetService(typeof(SpriteBatch)); }
+        }
+
+        public virtual void Draw(GameTime gameTime) {
+            if (Enabled) {
+                if (sq == null) {
+                    sq = new ScreenQuad(Game);
+                    sq.Initialize();
+                }
+                effect.CurrentTechnique.Passes[0].Apply();
+                sq.Draw();
+            }
+        }
+    }
 }

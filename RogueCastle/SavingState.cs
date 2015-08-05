@@ -1,13 +1,10 @@
-using System;
-namespace RogueCastle
-{
-	public enum SavingState
-	{
-		NotSaving,
-		ReadyToSelectStorageDevice,
-		SelectingStorageDevice,
-		ReadyToOpenStorageContainer,
-		OpeningStorageContainer,
-		ReadyToSave
-	}
+namespace RogueCastle {
+    public enum SavingState {
+        NotSaving,
+        ReadyToSelectStorageDevice,
+        SelectingStorageDevice,
+        ReadyToOpenStorageContainer,
+        OpeningStorageContainer,
+        ReadyToSave
+    }
 }
