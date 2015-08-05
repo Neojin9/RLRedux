@@ -3,31 +3,41 @@ using Microsoft.Xna.Framework.Graphics;
 
 
 namespace Randomchaos2DGodRays {
+
     public class LightSourceMask : BasePostProcess {
-        public Vector2 lighScreenSourcePos;
-        public float lightSize = 1500f;
-        public string lightSourceasset;
-        public Texture lishsourceTexture;
+
+        public Vector2 LighScreenSourcePos;
+        public float LightSize = 1500f;
+        public string LightSourceasset;
+        public Texture LishsourceTexture;
 
         public LightSourceMask(Game game, Vector2 sourcePos, string lightSourceasset, float lightSize) : base(game) {
+
             UsesVertexShader = true;
-            lighScreenSourcePos = sourcePos;
-            this.lightSourceasset = lightSourceasset;
-            this.lightSize = lightSize;
+            LighScreenSourcePos = sourcePos;
+            LightSourceasset = lightSourceasset;
+            LightSize = lightSize;
+
         }
 
         public override void Draw(GameTime gameTime) {
-            if (effect == null) {
-                effect = Game.Content.Load<Effect>("Shaders/LightSourceMask");
-                lishsourceTexture = Game.Content.Load<Texture2D>(lightSourceasset);
+
+            if (Effect == null) {
+                Effect = Game.Content.Load<Effect>("Shaders/LightSourceMask");
+                LishsourceTexture = Game.Content.Load<Texture2D>(LightSourceasset);
             }
-            effect.Parameters["screenRes"].SetValue(new Vector2(16f, 9f));
-            effect.Parameters["halfPixel"].SetValue(HalfPixel);
-            effect.CurrentTechnique = effect.Techniques["LightSourceMask"];
-            effect.Parameters["flare"].SetValue(lishsourceTexture);
-            effect.Parameters["SunSize"].SetValue(lightSize);
-            effect.Parameters["lightScreenPosition"].SetValue(lighScreenSourcePos);
+            
+            Effect.Parameters["screenRes"].SetValue(new Vector2(16f, 9f));
+            Effect.Parameters["halfPixel"].SetValue(HalfPixel);
+            Effect.CurrentTechnique = Effect.Techniques["LightSourceMask"];
+            Effect.Parameters["flare"].SetValue(LishsourceTexture);
+            Effect.Parameters["SunSize"].SetValue(LightSize);
+            Effect.Parameters["lightScreenPosition"].SetValue(LighScreenSourcePos);
+            
             base.Draw(gameTime);
+
         }
+
     }
+
 }

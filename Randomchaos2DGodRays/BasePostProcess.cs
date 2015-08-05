@@ -3,16 +3,18 @@ using Microsoft.Xna.Framework.Graphics;
 
 
 namespace Randomchaos2DGodRays {
+
     public class BasePostProcess {
+
         public Texture2D BackBuffer;
         public bool Enabled = true;
         protected Game Game;
         public Vector2 HalfPixel;
         public bool UsesVertexShader;
-        protected Effect effect;
-        public RenderTarget2D newScene;
-        public Texture2D orgBuffer;
-        private ScreenQuad sq;
+        protected Effect Effect;
+        public RenderTarget2D NewScene;
+        public Texture2D OrgBuffer;
+        private ScreenQuad _screenQuad;
 
         public BasePostProcess(Game game) {
             Game = game;
@@ -23,14 +25,21 @@ namespace Randomchaos2DGodRays {
         }
 
         public virtual void Draw(GameTime gameTime) {
+
             if (Enabled) {
-                if (sq == null) {
-                    sq = new ScreenQuad(Game);
-                    sq.Initialize();
+
+                if (_screenQuad == null) {
+                    _screenQuad = new ScreenQuad(Game);
+                    _screenQuad.Initialize();
                 }
-                effect.CurrentTechnique.Passes[0].Apply();
-                sq.Draw();
+
+                Effect.CurrentTechnique.Passes[0].Apply();
+                _screenQuad.Draw();
+
             }
+
         }
+
     }
+
 }

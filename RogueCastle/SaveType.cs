@@ -1,4 +1,5 @@
 namespace RogueCastle {
+
     public enum SaveType {
         None,
         PlayerData,
@@ -7,4 +8,5 @@ namespace RogueCastle {
         MapData,
         Lineage
     }
+
 }

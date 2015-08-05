@@ -56,7 +56,7 @@ namespace RogueCastle {
             m_godRay = new CrepuscularRays(base.ScreenManager.Game, Vector2.One * 0.5f, "GameSpritesheets/flare3", 2f, 0.97f, 0.97f, 0.5f, 1.25f);
             m_ppm.AddEffect(m_godRay);
             m_godRayTexture = new RenderTarget2D(base.Camera.GraphicsDevice, 1320, 720, false, SurfaceFormat.Color, DepthFormat.None);
-            m_godRay.lightSource = new Vector2(0.495f, 0.3f);
+            m_godRay.LightSource = new Vector2(0.495f, 0.3f);
             m_bg = new SpriteObj("TitleBG_Sprite");
             m_bg.Scale = new Vector2(1320f / (float)m_bg.Width, 720f / (float)m_bg.Height);
             m_bg.TextureColor = Color.Red;
@@ -420,13 +420,13 @@ namespace RogueCastle {
 
         public void ChangeRay() {
             if (Keyboard.GetState().IsKeyDown(Keys.Up))
-                m_godRay.lightSource = new Vector2(m_godRay.lightSource.X, m_godRay.lightSource.Y - 0.01f);
+                m_godRay.LightSource = new Vector2(m_godRay.LightSource.X, m_godRay.LightSource.Y - 0.01f);
             if (Keyboard.GetState().IsKeyDown(Keys.Down))
-                m_godRay.lightSource = new Vector2(m_godRay.lightSource.X, m_godRay.lightSource.Y + 0.01f);
+                m_godRay.LightSource = new Vector2(m_godRay.LightSource.X, m_godRay.LightSource.Y + 0.01f);
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
-                m_godRay.lightSource = new Vector2(m_godRay.lightSource.X - 0.01f, m_godRay.lightSource.Y);
+                m_godRay.LightSource = new Vector2(m_godRay.LightSource.X - 0.01f, m_godRay.LightSource.Y);
             if (Keyboard.GetState().IsKeyDown(Keys.Right))
-                m_godRay.lightSource = new Vector2(m_godRay.lightSource.X + 0.01f, m_godRay.lightSource.Y);
+                m_godRay.LightSource = new Vector2(m_godRay.LightSource.X + 0.01f, m_godRay.LightSource.Y);
             if (Keyboard.GetState().IsKeyDown(Keys.Y))
                 m_godRay.Exposure += 0.01f;
             if (Keyboard.GetState().IsKeyDown(Keys.H))

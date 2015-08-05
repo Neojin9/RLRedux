@@ -6,141 +6,197 @@ using Tweener.Ease;
 
 
 namespace RogueCastle {
+
     public class ArenaBonusRoom : BonusRoomObj {
-        private ChestObj m_chest;
-        private bool m_chestRevealed;
-        private float m_chestStartingY;
+
+        private ChestObj _chest;
+        private bool     _chestRevealed;
+        private float    _chestStartingY;
 
         public override void Initialize() {
-            foreach (GameObj current in base.GameObjList) {
-                if (current is ChestObj) {
-                    m_chest = (current as ChestObj);
+
+            for (int index = 0; index < GameObjList.Count; index++) {
+
+                GameObj gameObj = GameObjList[index];
+
+                if (gameObj is ChestObj) {
+                    _chest = (gameObj as ChestObj);
                     break;
                 }
+
             }
-            m_chest.ChestType = 3;
-            m_chestStartingY = m_chest.Y - 200f + (float)m_chest.Height + 6f;
+
+            _chest.ChestType = 3;
+            _chestStartingY = _chest.Y - 200f + _chest.Height + 6f;
+            
             base.Initialize();
+
         }
 
         public override void OnEnter() {
+
             UpdateEnemyNames();
-            m_chest.Y = m_chestStartingY;
-            m_chest.ChestType = 3;
-            if (base.RoomCompleted) {
-                m_chest.Opacity = 1f;
-                m_chest.Y = m_chestStartingY + 200f;
-                m_chest.IsEmpty = true;
-                m_chest.ForceOpen();
-                m_chestRevealed = true;
-                using (List<EnemyObj>.Enumerator enumerator = base.EnemyList.GetEnumerator()) {
+            _chest.Y = _chestStartingY;
+            _chest.ChestType = 3;
+            
+            if (RoomCompleted) {
+
+                _chest.Opacity = 1f;
+                _chest.Y = _chestStartingY + 200f;
+                _chest.IsEmpty = true;
+                _chest.ForceOpen();
+                _chestRevealed = true;
+                
+                using (List<EnemyObj>.Enumerator enumerator = EnemyList.GetEnumerator()) {
+
                     while (enumerator.MoveNext()) {
-                        EnemyObj current = enumerator.Current;
-                        if (!current.IsKilled)
-                            current.KillSilently();
+
+                        EnemyObj enemyObj = enumerator.Current;
+
+                        if (enemyObj != null && !enemyObj.IsKilled)
+                            enemyObj.KillSilently();
+
                     }
+
                     goto IL_137;
+
                 }
+
             }
-            if (base.ActiveEnemies == 0) {
-                m_chest.Opacity = 1f;
-                m_chest.Y = m_chestStartingY + 200f;
-                m_chest.IsEmpty = false;
-                m_chest.IsLocked = false;
-                m_chestRevealed = true;
+
+            if (ActiveEnemies == 0) {
+
+                _chest.Opacity  = 1f;
+                _chest.Y        = _chestStartingY + 200f;
+                _chest.IsEmpty  = false;
+                _chest.IsLocked = false;
+                _chestRevealed  = true;
+
             }
             else {
-                m_chest.Opacity = 0f;
-                m_chest.Y = m_chestStartingY;
-                m_chest.IsLocked = true;
-                m_chestRevealed = false;
+
+                _chest.Opacity  = 0f;
+                _chest.Y        = _chestStartingY;
+                _chest.IsLocked = true;
+                _chestRevealed  = false;
+
             }
+
             IL_137:
-            if (m_chest.PhysicsMngr == null)
-                Player.PhysicsMngr.AddObject(m_chest);
+            
+            if (_chest.PhysicsMngr == null)
+                Player.PhysicsMngr.AddObject(_chest);
+            
             base.OnEnter();
+
         }
 
         private void UpdateEnemyNames() {
             bool flag = false;
-            foreach (EnemyObj current in base.EnemyList) {
-                if (current is EnemyObj_EarthWizard) {
+
+            for (int index = 0; index < EnemyList.Count; index++) {
+
+                EnemyObj enemyObj = EnemyList[index];
+                
+                if (enemyObj is EnemyObj_EarthWizard) {
                     if (!flag) {
-                        current.Name = "Barbatos";
+                        enemyObj.Name = "Barbatos";
                         flag = true;
                     }
                     else
-                        current.Name = "Amon";
+                        enemyObj.Name = "Amon";
                 }
-                else if (current is EnemyObj_Skeleton) {
+                else if (enemyObj is EnemyObj_Skeleton) {
                     if (!flag) {
-                        current.Name = "Berith";
+                        enemyObj.Name = "Berith";
                         flag = true;
                     }
                     else
-                        current.Name = "Halphas";
+                        enemyObj.Name = "Halphas";
                 }
-                else if (current is EnemyObj_Plant) {
+                else if (enemyObj is EnemyObj_Plant) {
                     if (!flag) {
-                        current.Name = "Stolas";
+                        enemyObj.Name = "Stolas";
                         flag = true;
                     }
                     else
-                        current.Name = "Focalor";
+                        enemyObj.Name = "Focalor";
                 }
+
             }
+
         }
 
         public override void Update(GameTime gameTime) {
-            if (!m_chest.IsOpen) {
-                if (base.ActiveEnemies == 0 && m_chest.Opacity == 0f && !m_chestRevealed) {
-                    m_chestRevealed = true;
+
+            if (!_chest.IsOpen) {
+                if (ActiveEnemies == 0 && _chest.Opacity == 0f && !_chestRevealed) {
+                    _chestRevealed = true;
                     DisplayChest();
                 }
             }
-            else if (!base.RoomCompleted)
-                base.RoomCompleted = true;
+            else if (!RoomCompleted)
+                RoomCompleted = true;
+
             base.Update(gameTime);
+
         }
 
         public override void OnExit() {
-            bool flag = false;
-            bool flag2 = false;
-            bool flag3 = false;
-            bool flag4 = false;
-            bool flag5 = false;
-            if (Game.PlayerStats.EnemiesKilledList[15].W > 0f)
-                flag = true;
-            if (Game.PlayerStats.EnemiesKilledList[22].W > 0f)
-                flag2 = true;
-            if (Game.PlayerStats.EnemiesKilledList[32].W > 0f)
-                flag3 = true;
-            if (Game.PlayerStats.EnemiesKilledList[12].W > 0f)
-                flag4 = true;
-            if (Game.PlayerStats.EnemiesKilledList[5].W > 0f)
-                flag5 = true;
-            if (flag && flag2 && flag3 && flag4 && flag5)
+
+            bool skeletonMiniBossKilled = false;
+            bool plantMiniBossKilled    = false;
+            bool portraitMiniBossKilled = false;
+            bool knightMiniBossKilled   = false;
+            bool wizardMiniBossKilled   = false;
+            
+            if (Game.PlayerStats.EnemiesKilledList[EnemyType.Skeleton].W > 0f)
+                skeletonMiniBossKilled = true;
+            
+            if (Game.PlayerStats.EnemiesKilledList[EnemyType.Plant].W > 0f)
+                plantMiniBossKilled = true;
+            
+            if (Game.PlayerStats.EnemiesKilledList[EnemyType.Portrait].W > 0f)
+                portraitMiniBossKilled = true;
+            
+            if (Game.PlayerStats.EnemiesKilledList[EnemyType.Knight].W > 0f)
+                knightMiniBossKilled = true;
+            
+            if (Game.PlayerStats.EnemiesKilledList[EnemyType.EarthWizard].W > 0f)
+                wizardMiniBossKilled = true;
+            
+            if (skeletonMiniBossKilled && plantMiniBossKilled && portraitMiniBossKilled && knightMiniBossKilled && wizardMiniBossKilled)
                 GameUtil.UnlockAchievement("FEAR_OF_ANIMALS");
+            
             base.OnExit();
+
         }
 
         private void DisplayChest() {
-            m_chest.IsLocked = false;
-            Tween.To(m_chest, 2f, new Easing(Tween.EaseNone), new[] {
+
+            _chest.IsLocked = false;
+            
+            Tween.To(_chest, 2f, Tween.EaseNone, new[] {
                 "Opacity",
                 "1"
             });
-            Tween.By(m_chest, 2f, new Easing(Quad.EaseOut), new[] {
+            
+            Tween.By(_chest, 2f, Quad.EaseOut, new[] {
                 "Y",
                 "200"
             });
+
         }
 
         public override void Dispose() {
-            if (!base.IsDisposed) {
-                m_chest = null;
+
+            if (!IsDisposed) {
+                _chest = null;
                 base.Dispose();
             }
+
         }
+
     }
+
 }

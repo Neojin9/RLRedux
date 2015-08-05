@@ -1,4 +1,5 @@
 namespace RogueCastle {
+
     public enum SavingState {
         NotSaving,
         ReadyToSelectStorageDevice,
@@ -7,4 +8,5 @@ namespace RogueCastle {
         OpeningStorageContainer,
         ReadyToSave
     }
+    
 }
