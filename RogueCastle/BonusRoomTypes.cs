@@ -1,5 +1,7 @@
 namespace RogueCastle {
+
     public class BonusRoomTypes {
+
         public const byte None = 0;
         public const byte PickChest = 1;
         public const byte SpecialItem = 2;
@@ -12,5 +14,7 @@ namespace RogueCastle {
         public const byte CarnivalShoot2 = 9;
         public const byte Arena = 10;
         public const byte Jukebox = 11;
+
     }
+
 }

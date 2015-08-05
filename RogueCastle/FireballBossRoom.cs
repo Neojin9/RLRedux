@@ -42,7 +42,7 @@ namespace RogueCastle {
         }
 
         public override void OnEnter() {
-            m_cutsceneRunning = true;
+            CutsceneRunning = true;
             SoundManager.StopMusic(0.5f);
             Player.LockControls();
             m_boss.Scale = Vector2.Zero;
@@ -138,7 +138,7 @@ namespace RogueCastle {
                 current.UnpauseEnemy(true);
                 current.Visible = true;
             }
-            m_cutsceneRunning = false;
+            CutsceneRunning = false;
         }
 
         public override void Update(GameTime gameTime) {
@@ -148,7 +148,7 @@ namespace RogueCastle {
                         current.Kill(false);
                 }
             }
-            if (!m_cutsceneRunning && !SoundManager.IsMusicPlaying && !m_boss.BossVersionKilled)
+            if (!CutsceneRunning && !SoundManager.IsMusicPlaying && !m_boss.BossVersionKilled)
                 SoundManager.PlayMusic("TowerBossSong", true, 0f);
             base.Update(gameTime);
         }

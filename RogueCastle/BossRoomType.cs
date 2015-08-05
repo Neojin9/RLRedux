@@ -1,4 +1,5 @@
 namespace RogueCastle {
+
     internal class BossRoomType {
         public const byte None = 0;
         public const byte EyeballBossRoom = 1;
@@ -9,4 +10,5 @@ namespace RogueCastle {
         public const byte FireballBossRoom = 6;
         public const byte BlobBossRoom = 7;
     }
+
 }

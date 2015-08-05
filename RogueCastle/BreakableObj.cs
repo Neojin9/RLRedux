@@ -1,70 +1,93 @@
 using DS2DEngine;
 using Microsoft.Xna.Framework;
-using System;
 using Tweener;
 using Tweener.Ease;
 
 
 namespace RogueCastle {
+
     public class BreakableObj : PhysicsObjContainer {
-        private bool m_internalIsWeighted;
+
+        private bool _internalIsWeighted;
 
         public BreakableObj(string spriteName) : base(spriteName, null) {
-            base.DisableCollisionBoxRotations = true;
+
+            DisableCollisionBoxRotations = true;
             Broken = false;
-            base.OutlineWidth = 2;
-            base.SameTypesCollide = true;
-            base.CollisionTypeTag = 5;
-            base.CollidesLeft = false;
-            base.CollidesRight = false;
-            base.CollidesBottom = false;
-            foreach (GameObj current in this._objectList)
-                current.Visible = false;
-            this._objectList[0].Visible = true;
+            OutlineWidth = 2;
+            SameTypesCollide = true;
+            CollisionTypeTag = 5;
+            CollidesLeft = false;
+            CollidesRight = false;
+            CollidesBottom = false;
+            
+            for (int index = 0; index < _objectList.Count; index++)
+                _objectList[index].Visible = false;
+            
+            _objectList[0].Visible = true;
             DropItem = true;
+
         }
 
-        public bool Broken { get; internal set; }
-        public bool DropItem { get; set; }
+        public bool Broken          { get; internal set; }
+        public bool DropItem        { get; set; }
         public bool HitBySpellsOnly { get; set; }
 
         public override void CollisionResponse(CollisionBox thisBox, CollisionBox otherBox, int collisionResponseType) {
+            
             PlayerObj playerObj = otherBox.AbsParent as PlayerObj;
+            
             if (playerObj != null && otherBox.Type == 1 && !HitBySpellsOnly && !Broken)
                 Break();
+            
             ProjectileObj projectileObj = otherBox.AbsParent as ProjectileObj;
+            
             if (projectileObj != null && (projectileObj.CollisionTypeTag == 2 || projectileObj.CollisionTypeTag == 10) && otherBox.Type == 1) {
+                
                 if (!Broken)
                     Break();
-                if (projectileObj.DestroysWithTerrain && base.SpriteName == "Target1_Character")
+                
+                if (projectileObj.DestroysWithTerrain && SpriteName == "Target1_Character")
                     projectileObj.RunDestroyAnimation(false);
+
             }
+
             if ((otherBox.AbsRect.Y > thisBox.AbsRect.Y || otherBox.AbsRotation != 0f) && (otherBox.Parent is TerrainObj || otherBox.AbsParent is BreakableObj))
                 base.CollisionResponse(thisBox, otherBox, collisionResponseType);
+
         }
 
         public void Break() {
+
             PlayerObj player = Game.ScreenManager.Player;
-            foreach (GameObj current in this._objectList)
-                current.Visible = true;
-            base.GoToFrame(2);
+
+            for (int index = 0; index < _objectList.Count; index++)
+                _objectList[index].Visible = true;
+
+            GoToFrame(2);
             Broken = true;
-            m_internalIsWeighted = base.IsWeighted;
-            base.IsWeighted = false;
-            base.IsCollidable = false;
+            _internalIsWeighted = IsWeighted;
+            IsWeighted = false;
+            IsCollidable = false;
+
             if (DropItem) {
+
                 bool flag = false;
-                if (base.Name == "Health") {
-                    player.AttachedLevel.ItemDropManager.DropItem(base.Position, 2, 0.1f);
+                
+                if (Name == "Health") {
+                    player.AttachedLevel.ItemDropManager.DropItem(Position, 2, 0.1f);
                     flag = true;
                 }
-                else if (base.Name == "Mana") {
-                    player.AttachedLevel.ItemDropManager.DropItem(base.Position, 3, 0.1f);
+                else if (Name == "Mana") {
+                    player.AttachedLevel.ItemDropManager.DropItem(Position, 3, 0.1f);
                     flag = true;
                 }
+
                 if (flag) {
-                    for (int i = 0; i < base.NumChildren; i++) {
-                        Tween.By(base.GetChildAt(i), 0.3f, new Easing(Linear.EaseNone), new[] {
+
+                    for (int i = 0; i < NumChildren; i++) {
+                        
+                        Tween.By(GetChildAt(i), 0.3f, Linear.EaseNone, new[] {
                             "X",
                             CDGMath.RandomInt(-50, 50).ToString(),
                             "Y",
@@ -72,13 +95,16 @@ namespace RogueCastle {
                             "Rotation",
                             CDGMath.RandomInt(-360, 360).ToString()
                         });
-                        Tween.To(base.GetChildAt(i), 0.1f, new Easing(Linear.EaseNone), new[] {
+
+                        Tween.To(GetChildAt(i), 0.1f, Linear.EaseNone, new[] {
                             "delay",
                             "0.2",
                             "Opacity",
                             "0"
                         });
+
                     }
+
                     SoundManager.Play3DSound(this, Game.ScreenManager.Player, new[] {
                         "EnemyHit1",
                         "EnemyHit2",
@@ -87,65 +113,86 @@ namespace RogueCastle {
                         "EnemyHit5",
                         "EnemyHit6"
                     });
+
                     SoundManager.Play3DSound(this, Game.ScreenManager.Player, new[] {
                         "Break1",
                         "Break2",
                         "Break3"
                     });
+
                     if (Game.PlayerStats.Traits.X == 15f || Game.PlayerStats.Traits.Y == 15f) {
                         player.CurrentMana += 1f;
                         player.AttachedLevel.TextManager.DisplayNumberStringText(1, "mp", Color.RoyalBlue, new Vector2(player.X, (player.Bounds.Top - 30)));
                     }
+
                     return;
+
                 }
+
                 int num = CDGMath.RandomInt(1, 100);
                 int num2 = 0;
                 int j = 0;
+                
                 while (j < GameEV.BREAKABLE_ITEMDROP_CHANCE.Length) {
+                    
                     num2 += GameEV.BREAKABLE_ITEMDROP_CHANCE[j];
+                    
                     if (num <= num2) {
+                        
                         if (j == 0) {
+
                             if (Game.PlayerStats.Traits.X != 24f && Game.PlayerStats.Traits.Y != 24f) {
-                                player.AttachedLevel.ItemDropManager.DropItem(base.Position, 2, 0.1f);
+                                player.AttachedLevel.ItemDropManager.DropItem(Position, 2, 0.1f);
                                 break;
                             }
+
                             EnemyObj_Chicken enemyObj_Chicken = new EnemyObj_Chicken(null, null, null, GameTypes.EnemyDifficulty.BASIC);
                             enemyObj_Chicken.AccelerationY = -500f;
-                            enemyObj_Chicken.Position = base.Position;
+                            enemyObj_Chicken.Position = Position;
                             enemyObj_Chicken.Y -= 50f;
                             enemyObj_Chicken.SaveToFile = false;
+                            
                             player.AttachedLevel.AddEnemyToCurrentRoom(enemyObj_Chicken);
                             enemyObj_Chicken.IsCollidable = false;
                             Tween.RunFunction(0.2f, enemyObj_Chicken, "MakeCollideable", new object[0]);
+                            
                             SoundManager.Play3DSound(this, Game.ScreenManager.Player, new[] {
                                 "Chicken_Cluck_01",
                                 "Chicken_Cluck_02",
                                 "Chicken_Cluck_03"
                             });
+
+                            break;
+
+                        }
+
+                        if (j == 1) {
+                            player.AttachedLevel.ItemDropManager.DropItem(Position, 3, 0.1f);
                             break;
                         }
-                        else {
-                            if (j == 1) {
-                                player.AttachedLevel.ItemDropManager.DropItem(base.Position, 3, 0.1f);
-                                break;
-                            }
-                            if (j == 2) {
-                                player.AttachedLevel.ItemDropManager.DropItem(base.Position, 1, 10f);
-                                break;
-                            }
-                            if (j == 3) {
-                                player.AttachedLevel.ItemDropManager.DropItem(base.Position, 10, 100f);
-                                break;
-                            }
+
+                        if (j == 2) {
+                            player.AttachedLevel.ItemDropManager.DropItem(Position, 1, 10f);
                             break;
                         }
+
+                        if (j == 3) {
+                            player.AttachedLevel.ItemDropManager.DropItem(Position, 10, 100f);
+                        }
+
+                        break;
+
                     }
-                    else
-                        j++;
+
+                    j++;
+
                 }
+
             }
-            for (int k = 0; k < base.NumChildren; k++) {
-                Tween.By(base.GetChildAt(k), 0.3f, new Easing(Linear.EaseNone), new[] {
+
+            for (int k = 0; k < NumChildren; k++) {
+                
+                Tween.By(GetChildAt(k), 0.3f, Linear.EaseNone, new[] {
                     "X",
                     CDGMath.RandomInt(-50, 50).ToString(),
                     "Y",
@@ -153,13 +200,16 @@ namespace RogueCastle {
                     "Rotation",
                     CDGMath.RandomInt(-360, 360).ToString()
                 });
-                Tween.To(base.GetChildAt(k), 0.1f, new Easing(Linear.EaseNone), new[] {
+
+                Tween.To(GetChildAt(k), 0.1f, Linear.EaseNone, new[] {
                     "delay",
                     "0.2",
                     "Opacity",
                     "0"
                 });
+
             }
+
             SoundManager.Play3DSound(this, Game.ScreenManager.Player, new[] {
                 "EnemyHit1",
                 "EnemyHit2",
@@ -168,62 +218,84 @@ namespace RogueCastle {
                 "EnemyHit5",
                 "EnemyHit6"
             });
+
             SoundManager.Play3DSound(this, Game.ScreenManager.Player, new[] {
                 "Break1",
                 "Break2",
                 "Break3"
             });
+
             if (Game.PlayerStats.Traits.X == 15f || Game.PlayerStats.Traits.Y == 15f) {
                 player.CurrentMana += 1f;
                 player.AttachedLevel.TextManager.DisplayNumberStringText(1, "mp", Color.RoyalBlue, new Vector2(player.X, (player.Bounds.Top - 30)));
             }
+
         }
 
         public void ForceBreak() {
-            foreach (GameObj current in this._objectList) {
+            
+            for (int index = 0; index < _objectList.Count; index++) {
+                GameObj current = _objectList[index];
                 current.Visible = true;
                 current.Opacity = 0f;
             }
-            base.GoToFrame(2);
+
+            GoToFrame(2);
             Broken = true;
-            m_internalIsWeighted = base.IsWeighted;
-            base.IsWeighted = false;
-            base.IsCollidable = false;
+            _internalIsWeighted = IsWeighted;
+            IsWeighted = false;
+            IsCollidable = false;
+
         }
 
         public void Reset() {
-            base.GoToFrame(1);
+            
+            GoToFrame(1);
             Broken = false;
-            base.IsWeighted = m_internalIsWeighted;
-            base.IsCollidable = true;
-            this.ChangeSprite(this._spriteName);
-            for (int i = 0; i < base.NumChildren; i++) {
-                base.GetChildAt(i).Opacity = 1f;
-                base.GetChildAt(i).Rotation = 0f;
+            IsWeighted = _internalIsWeighted;
+            IsCollidable = true;
+            ChangeSprite(_spriteName);
+            
+            for (int i = 0; i < NumChildren; i++) {
+                GetChildAt(i).Opacity = 1f;
+                GetChildAt(i).Rotation = 0f;
             }
-            foreach (GameObj current in this._objectList)
-                current.Visible = false;
-            this._objectList[0].Visible = true;
+
+            for (int index = 0; index < _objectList.Count; index++)
+                _objectList[index].Visible = false;
+            
+            _objectList[0].Visible = true;
+
         }
 
         public void UpdateTerrainBox() {
-            foreach (CollisionBox current in base.CollisionBoxes) {
+            
+            for (int index = 0; index < CollisionBoxes.Count; index++) {
+                
+                CollisionBox current = CollisionBoxes[index];
+                
                 if (current.Type == 0) {
-                    this.m_terrainBounds = current.AbsRect;
+                    m_terrainBounds = current.AbsRect;
                     break;
                 }
+
             }
+
         }
 
         protected override GameObj CreateCloneInstance() {
-            return new BreakableObj(this._spriteName);
+            return new BreakableObj(_spriteName);
         }
 
         protected override void FillCloneInstance(object obj) {
+
             base.FillCloneInstance(obj);
             BreakableObj breakableObj = obj as BreakableObj;
             breakableObj.HitBySpellsOnly = HitBySpellsOnly;
             breakableObj.DropItem = DropItem;
+
         }
+
     }
+
 }

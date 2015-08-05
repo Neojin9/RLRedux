@@ -1,7 +1,9 @@
 namespace RogueCastle {
+
     public class BonusRoomObj : RoomObj {
+
         public BonusRoomObj() {
-            base.ID = -1;
+            ID = -1;
         }
 
         public bool RoomCompleted { get; set; }
@@ -10,5 +12,7 @@ namespace RogueCastle {
             RoomCompleted = false;
             base.Reset();
         }
+
     }
+
 }

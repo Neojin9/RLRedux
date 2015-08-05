@@ -22,7 +22,7 @@ namespace RogueCastle {
         }
 
         public override void OnEnter() {
-            m_cutsceneRunning = true;
+            CutsceneRunning = true;
             SoundManager.StopMusic(0.5f);
             m_boss.ChangeSprite("EnemyEyeballBossFire_Character");
             m_boss.ChangeToBossPupil();
@@ -92,11 +92,11 @@ namespace RogueCastle {
             SoundManager.PlayMusic("CastleBossIntroSong", false, 1f);
             Player.AttachedLevel.CameraLockedToPlayer = true;
             Player.UnlockControls();
-            m_cutsceneRunning = false;
+            CutsceneRunning = false;
         }
 
         public override void Update(GameTime gameTime) {
-            if (!m_cutsceneRunning && !m_boss.BossVersionKilled && !SoundManager.IsMusicPlaying)
+            if (!CutsceneRunning && !m_boss.BossVersionKilled && !SoundManager.IsMusicPlaying)
                 SoundManager.PlayMusic("CastleBossSong", true, 0f);
             base.Update(gameTime);
         }

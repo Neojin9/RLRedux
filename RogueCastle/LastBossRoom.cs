@@ -62,7 +62,7 @@ namespace RogueCastle {
         }
 
         public void StartCutscene() {
-            m_cutsceneRunning = true;
+            CutsceneRunning = true;
             Player.LockControls();
             Player.AccelerationY = 0f;
             Player.AttachedLevel.RunCinematicBorders(8f);
@@ -123,7 +123,7 @@ namespace RogueCastle {
             SoundManager.PlayMusic("TitleScreenSong", true, 1f);
             Player.AttachedLevel.CameraLockedToPlayer = true;
             Player.UnlockControls();
-            m_cutsceneRunning = false;
+            CutsceneRunning = false;
         }
 
         public void RunFountainCutscene() {
@@ -202,7 +202,7 @@ namespace RogueCastle {
                     }
                 }
             }
-            if (!m_cutsceneRunning) {
+            if (!CutsceneRunning) {
                 foreach (EnemyObj current in base.EnemyList) {
                     if (!current.IsKilled)
                         current.Update(gameTime);
