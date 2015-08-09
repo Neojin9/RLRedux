@@ -82,7 +82,7 @@ namespace RogueCastle {
             base.Content.RootDirectory = "Content";
             EngineEV.ScreenWidth = 1320;
             EngineEV.ScreenHeight = 720;
-            base.Window.Title = "Rogue Legacy";
+            base.Window.Title = "Rogue Legacy - Redux";
             Game.ScreenManager = new RCScreenManager(this);
             m_saveGameManager = new SaveGameManager(this);
             base.IsFixedTimeStep = false;

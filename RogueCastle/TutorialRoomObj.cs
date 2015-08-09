@@ -8,42 +8,54 @@ using Tweener;
 
 
 namespace RogueCastle {
+
     public class TutorialRoomObj : RoomObj {
-        private int m_creditsIndex;
-        private Vector2 m_creditsPosition;
-        private TextObj m_creditsText;
-        private string[] m_creditsTextList;
-        private string[] m_creditsTextTitleList;
-        private TextObj m_creditsTitleText;
-        private SpriteObj m_diary;
-        private DoorObj m_door;
-        private SpriteObj m_doorSprite;
-        private SpriteObj m_speechBubble;
-        private string[] m_tutorialControllerTextList;
-        private KeyIconTextObj m_tutorialText;
-        private string[] m_tutorialTextList;
-        private int m_waypointIndex;
-        private List<GameObj> m_waypointList;
+
+        private int _creditsIndex;
+        private Vector2 _creditsPosition;
+        private TextObj _creditsText;
+        private string[] _creditsTextList;
+        private string[] _creditsTextTitleList;
+        private TextObj _creditsTitleText;
+        private SpriteObj _diary;
+        private DoorObj _door;
+        private SpriteObj _doorSprite;
+        private SpriteObj _speechBubble;
+        private string[] _tutorialControllerTextList;
+        private KeyIconTextObj _tutorialText;
+        private string[] _tutorialTextList;
+        private int _waypointIndex;
+        private List<GameObj> _waypointList;
 
         public TutorialRoomObj() {
-            m_waypointList = new List<GameObj>();
+            _waypointList = new List<GameObj>();
         }
 
         public override void Initialize() {
-            foreach (GameObj current in base.GameObjList) {
+
+            for (int index = 0; index < GameObjList.Count; index++) {
+
+                GameObj current = GameObjList[index];
+
                 if (current.Name == "diary")
-                    m_diary = (current as SpriteObj);
+                    _diary = (current as SpriteObj);
+
                 if (current.Name == "doorsprite")
-                    m_doorSprite = (current as SpriteObj);
+                    _doorSprite = (current as SpriteObj);
+
             }
-            m_door = base.DoorList[0];
-            m_speechBubble = new SpriteObj("ExclamationSquare_Sprite");
-            m_speechBubble.Flip = SpriteEffects.FlipHorizontally;
-            m_speechBubble.Scale = new Vector2(1.2f, 1.2f);
-            base.GameObjList.Add(m_speechBubble);
-            m_diary.OutlineWidth = 2;
-            m_speechBubble.Position = new Vector2(m_diary.X, m_diary.Y - (float)m_speechBubble.Height - 20f);
-            m_tutorialTextList = new[] {
+
+            _door = DoorList[0];
+            
+            _speechBubble = new SpriteObj("ExclamationSquare_Sprite");
+            _speechBubble.Flip = SpriteEffects.FlipHorizontally;
+            _speechBubble.Scale = new Vector2(1.2f, 1.2f);
+            
+            GameObjList.Add(_speechBubble);
+            _diary.OutlineWidth = 2;
+            _speechBubble.Position = new Vector2(_diary.X, _diary.Y - _speechBubble.Height - 20f);
+            
+            _tutorialTextList = new[] {
                 "Tap [Input:" + 11 + "] to Jump",
                 "Hold [Input:" + 11 + "] to Jump Higher",
                 "Tap [Input:" + 12 + "] to Attack",
@@ -62,7 +74,8 @@ namespace RogueCastle {
                     "] to Attack Down"
                 })
             };
-            m_tutorialControllerTextList = new[] {
+
+            _tutorialControllerTextList = new[] {
                 "Tap [Input:" + 10 + "] to Jump",
                 "Hold [Input:" + 10 + "] to Jump Higher",
                 "Tap [Input:" + 12 + "] to Attack",
@@ -81,7 +94,8 @@ namespace RogueCastle {
                     "] to Attack Down"
                 })
             };
-            m_creditsTextTitleList = new[] {
+
+            _creditsTextTitleList = new[] {
                 "Developed by",
                 "Design",
                 "Programming",
@@ -90,7 +104,8 @@ namespace RogueCastle {
                 "Music",
                 ""
             };
-            m_creditsTextList = new[] {
+
+            _creditsTextList = new[] {
                 "Cellar Door Games",
                 "Teddy Lee",
                 "Kenny Lee",
@@ -99,235 +114,308 @@ namespace RogueCastle {
                 "Judson Cowan",
                 "Rogue Legacy"
             };
-            m_creditsPosition = new Vector2(50f, 580f);
-            foreach (GameObj current2 in base.GameObjList) {
+
+            _creditsPosition = new Vector2(50f, 580f);
+
+            for (int index = 0; index < GameObjList.Count; index++) {
+
+                GameObj current2 = GameObjList[index];
+
                 if (current2.Name == "waypoint1")
-                    m_waypointList.Add(current2);
+                    _waypointList.Add(current2);
+                
                 if (current2.Name == "waypoint2")
-                    m_waypointList.Add(current2);
+                    _waypointList.Add(current2);
+                
                 if (current2.Name == "waypoint3")
-                    m_waypointList.Add(current2);
+                    _waypointList.Add(current2);
+                
                 if (current2.Name == "waypoint4")
-                    m_waypointList.Add(current2);
+                    _waypointList.Add(current2);
+                
                 if (current2.Name == "waypoint5")
-                    m_waypointList.Add(current2);
+                    _waypointList.Add(current2);
+
             }
+
             base.Initialize();
+
         }
 
         public override void LoadContent(GraphicsDevice graphics) {
-            m_tutorialText = new KeyIconTextObj(Game.JunicodeLargeFont);
-            m_tutorialText.FontSize = 28f;
-            m_tutorialText.Text = "[Input:" + 10 + "] to Jump";
-            m_tutorialText.Align = Types.TextAlign.Centre;
-            m_tutorialText.OutlineWidth = 2;
-            m_tutorialText.ForcedScale = new Vector2(0.8f, 0.8f);
-            m_creditsText = new TextObj(Game.JunicodeFont);
-            m_creditsText.FontSize = 20f;
-            m_creditsText.Text = "Cellar Door Games";
-            m_creditsText.DropShadow = new Vector2(2f, 2f);
-            m_creditsTitleText = (m_creditsText.Clone() as TextObj);
-            m_creditsTitleText.FontSize = 14f;
+
+            _tutorialText = new KeyIconTextObj(Game.JunicodeLargeFont);
+            _tutorialText.FontSize = 28f;
+            _tutorialText.Text = "[Input:" + 10 + "] to Jump";
+            _tutorialText.Align = Types.TextAlign.Centre;
+            _tutorialText.OutlineWidth = 2;
+            _tutorialText.ForcedScale = new Vector2(0.8f, 0.8f);
+            
+            _creditsText = new TextObj(Game.JunicodeFont);
+            _creditsText.FontSize = 20f;
+            _creditsText.Text = "Cellar Door Games";
+            _creditsText.DropShadow = new Vector2(2f, 2f);
+            
+            _creditsTitleText = (_creditsText.Clone() as TextObj);
+            _creditsTitleText.FontSize = 14f;
+            
             TextObj textObj = new TextObj(Game.JunicodeFont);
             textObj.FontSize = 12f;
             textObj.Text = "Down Attack this";
             textObj.OutlineWidth = 2;
             textObj.Align = Types.TextAlign.Centre;
-            textObj.Position = m_waypointList[m_waypointList.Count - 1].Position;
+            textObj.Position = _waypointList[_waypointList.Count - 1].Position;
             textObj.X -= 25f;
             textObj.Y -= 70f;
-            base.GameObjList.Add(textObj);
+            
+            GameObjList.Add(textObj);
             base.LoadContent(graphics);
+
         }
 
         public override void OnEnter() {
-            m_speechBubble.Visible = false;
-            m_diary.Visible = false;
-            m_doorSprite.ChangeSprite("CastleDoorOpen_Sprite");
+
+            _speechBubble.Visible = false;
+            _diary.Visible = false;
+            _doorSprite.ChangeSprite("CastleDoorOpen_Sprite");
+            
             if (Game.PlayerStats.TutorialComplete) {
+
                 if (!Game.PlayerStats.ReadLastDiary) {
-                    m_door.Locked = true;
-                    m_doorSprite.ChangeSprite("CastleDoor_Sprite");
+                    _door.Locked = true;
+                    _doorSprite.ChangeSprite("CastleDoor_Sprite");
                 }
                 else
-                    m_door.Locked = false;
-                m_diary.Visible = true;
+                    _door.Locked = false;
+
+                _diary.Visible = true;
                 Player.UpdateCollisionBoxes();
-                Player.Position = new Vector2(base.X + 240f + (float)Player.Width, (this.Bounds.Bottom - 120) - ((float)Player.Bounds.Bottom - Player.Y));
+                Player.Position = new Vector2(X + 240f + Player.Width, (Bounds.Bottom - 120) - (Player.Bounds.Bottom - Player.Y));
             }
-            m_creditsTitleText.Opacity = 0f;
-            m_creditsText.Opacity = 0f;
-            foreach (EnemyObj current in base.EnemyList)
+            _creditsTitleText.Opacity = 0f;
+            _creditsText.Opacity = 0f;
+            
+            for (int index = 0; index < EnemyList.Count; index++) {
+                EnemyObj current = EnemyList[index];
                 current.Damage = 0;
-            m_tutorialText.Opacity = 0f;
+            }
+
+            _tutorialText.Opacity = 0f;
             Player.UnlockControls();
+            
             if (!Game.PlayerStats.TutorialComplete)
                 SoundManager.PlayMusic("EndSong", true, 4f);
             else
                 SoundManager.StopMusic(4f);
+
             Tween.RunFunction(2f, Player.AttachedLevel, "DisplayCreditsText", new object[] {
                 true
             });
+            
             base.OnEnter();
+
         }
 
         public void DisplayCreditsText() {
-            if (m_creditsIndex < m_creditsTextList.Length) {
-                m_creditsTitleText.Opacity = 0f;
-                m_creditsText.Opacity = 0f;
-                m_creditsTitleText.Text = m_creditsTextTitleList[m_creditsIndex];
-                m_creditsText.Text = m_creditsTextList[m_creditsIndex];
-                Tween.To(m_creditsTitleText, 0.5f, new Easing(Tween.EaseNone), new[] {
+
+            if (_creditsIndex < _creditsTextList.Length) {
+
+                _creditsTitleText.Opacity = 0f;
+                _creditsText.Opacity = 0f;
+                _creditsTitleText.Text = _creditsTextTitleList[_creditsIndex];
+                _creditsText.Text = _creditsTextList[_creditsIndex];
+                
+                Tween.To(_creditsTitleText, 0.5f, Tween.EaseNone, new[] {
                     "Opacity",
                     "1"
                 });
-                Tween.To(m_creditsText, 0.5f, new Easing(Tween.EaseNone), new[] {
+
+                Tween.To(_creditsText, 0.5f, Tween.EaseNone, new[] {
                     "delay",
                     "0.2",
                     "Opacity",
                     "1"
                 });
-                m_creditsTitleText.Opacity = 1f;
-                m_creditsText.Opacity = 1f;
-                Tween.To(m_creditsTitleText, 0.5f, new Easing(Tween.EaseNone), new[] {
+
+                _creditsTitleText.Opacity = 1f;
+                _creditsText.Opacity = 1f;
+                
+                Tween.To(_creditsTitleText, 0.5f, Tween.EaseNone, new[] {
                     "delay",
                     "4",
                     "Opacity",
                     "0"
                 });
-                Tween.To(m_creditsText, 0.5f, new Easing(Tween.EaseNone), new[] {
+
+                Tween.To(_creditsText, 0.5f, Tween.EaseNone, new[] {
                     "delay",
                     "4.2",
                     "Opacity",
                     "0"
                 });
-                m_creditsTitleText.Opacity = 0f;
-                m_creditsText.Opacity = 0f;
-                m_creditsIndex++;
+
+                _creditsTitleText.Opacity = 0f;
+                _creditsText.Opacity = 0f;
+                _creditsIndex++;
+
                 Tween.RunFunction(8f, this, "DisplayCreditsText", new object[0]);
+
             }
+
         }
 
         private int PlayerNearWaypoint() {
-            for (int i = 0; i < m_waypointList.Count; i++) {
-                if (CDGMath.DistanceBetweenPts(Player.Position, m_waypointList[i].Position) < 500f)
+
+            for (int i = 0; i < _waypointList.Count; i++) {
+                if (CDGMath.DistanceBetweenPts(Player.Position, _waypointList[i].Position) < 500f)
                     return i;
             }
+
             return -1;
+
         }
 
         public override void Update(GameTime gameTime) {
+
             if (!Game.PlayerStats.TutorialComplete) {
-                int waypointIndex = m_waypointIndex;
-                m_waypointIndex = PlayerNearWaypoint();
-                if (m_waypointIndex != waypointIndex) {
-                    Tween.StopAllContaining(m_tutorialText, false);
-                    if (m_waypointIndex != -1) {
+
+                int waypointIndex = _waypointIndex;
+                _waypointIndex = PlayerNearWaypoint();
+                
+                if (_waypointIndex != waypointIndex) {
+
+                    Tween.StopAllContaining(_tutorialText, false);
+                    
+                    if (_waypointIndex != -1) {
+
                         if (!InputManager.GamePadIsConnected(PlayerIndex.One))
-                            m_tutorialText.Text = m_tutorialTextList[m_waypointIndex];
+                            _tutorialText.Text = _tutorialTextList[_waypointIndex];
                         else
-                            m_tutorialText.Text = m_tutorialControllerTextList[m_waypointIndex];
-                        Tween.To(m_tutorialText, 0.25f, new Easing(Tween.EaseNone), new[] {
+                            _tutorialText.Text = _tutorialControllerTextList[_waypointIndex];
+
+                        Tween.To(_tutorialText, 0.25f, Tween.EaseNone, new[] {
                             "Opacity",
                             "1"
                         });
                     }
                     else {
-                        Tween.To(m_tutorialText, 0.25f, new Easing(Tween.EaseNone), new[] {
+                        Tween.To(_tutorialText, 0.25f, Tween.EaseNone, new[] {
                             "Opacity",
                             "0"
                         });
                     }
+
                 }
+
             }
             else {
-                Rectangle bounds = m_diary.Bounds;
+
+                Rectangle bounds = _diary.Bounds;
                 bounds.X -= 50;
                 bounds.Width += 100;
-                m_speechBubble.Y = m_diary.Y - (float)m_speechBubble.Height - 20f - 30f + (float)Math.Sin((Game.TotalGameTime * 20f)) * 2f;
+                _speechBubble.Y = _diary.Y - _speechBubble.Height - 20f - 30f + (float)Math.Sin((Game.TotalGameTime * 20f)) * 2f;
+                
                 if (CollisionMath.Intersects(Player.Bounds, bounds) && Player.IsTouchingGround) {
-                    if (m_speechBubble.SpriteName == "ExclamationSquare_Sprite")
-                        m_speechBubble.ChangeSprite("UpArrowSquare_Sprite");
+                    
+                    if (_speechBubble.SpriteName == "ExclamationSquare_Sprite")
+                        _speechBubble.ChangeSprite("UpArrowSquare_Sprite");
+                    
                     if (Game.GlobalInput.JustPressed(16) || Game.GlobalInput.JustPressed(17)) {
+
                         if (!Game.PlayerStats.ReadLastDiary) {
                             RCScreenManager rCScreenManager = Player.AttachedLevel.ScreenManager as RCScreenManager;
                             rCScreenManager.DialogueScreen.SetDialogue("DiaryEntry" + 24);
                             rCScreenManager.DialogueScreen.SetConfirmEndHandler(this, "RunFlashback", new object[0]);
-                            rCScreenManager.DisplayScreen(13, true, null);
+                            rCScreenManager.DisplayScreen(13, true);
                         }
                         else {
                             RCScreenManager rCScreenManager2 = Player.AttachedLevel.ScreenManager as RCScreenManager;
-                            rCScreenManager2.DisplayScreen(20, true, null);
+                            rCScreenManager2.DisplayScreen(20, true);
                         }
+
                     }
+
                 }
-                else if (m_speechBubble.SpriteName == "UpArrowSquare_Sprite")
-                    m_speechBubble.ChangeSprite("ExclamationSquare_Sprite");
+                else if (_speechBubble.SpriteName == "UpArrowSquare_Sprite")
+                    _speechBubble.ChangeSprite("ExclamationSquare_Sprite");
+
                 if (!Game.PlayerStats.ReadLastDiary || CollisionMath.Intersects(Player.Bounds, bounds))
-                    m_speechBubble.Visible = true;
+                    _speechBubble.Visible = true;
                 else if (Game.PlayerStats.ReadLastDiary && !CollisionMath.Intersects(Player.Bounds, bounds))
-                    m_speechBubble.Visible = false;
+                    _speechBubble.Visible = false;
+
             }
+
             base.Update(gameTime);
+
         }
 
         public void RunFlashback() {
             Player.LockControls();
-            (Player.AttachedLevel.ScreenManager as RCScreenManager).DisplayScreen(25, true, null);
+            (Player.AttachedLevel.ScreenManager as RCScreenManager).DisplayScreen(25, true);
             Tween.RunFunction(0.5f, this, "OpenDoor", new object[0]);
         }
 
         public void OpenDoor() {
+
             Player.UnlockControls();
-            m_doorSprite.ChangeSprite("CastleDoorOpen_Sprite");
-            m_door.Locked = false;
+            _doorSprite.ChangeSprite("CastleDoorOpen_Sprite");
+            _door.Locked = false;
             Game.PlayerStats.ReadLastDiary = true;
             Game.PlayerStats.DiaryEntry = 25;
+
             (Player.AttachedLevel.ScreenManager.Game as Game).SaveManager.SaveFiles(new[] {
                 SaveType.PlayerData
             });
+
         }
 
         public override void Draw(Camera2D camera) {
+            
             Vector2 topLeftCorner = Game.ScreenManager.Camera.TopLeftCorner;
-            m_creditsTitleText.Position = new Vector2(topLeftCorner.X + m_creditsPosition.X, topLeftCorner.Y + m_creditsPosition.Y);
-            m_creditsText.Position = m_creditsTitleText.Position;
-            m_creditsText.Y += 35f;
-            m_creditsTitleText.X += 5f;
+            _creditsTitleText.Position = new Vector2(topLeftCorner.X + _creditsPosition.X, topLeftCorner.Y + _creditsPosition.Y);
+            _creditsText.Position = _creditsTitleText.Position;
+            _creditsText.Y += 35f;
+            _creditsTitleText.X += 5f;
             base.Draw(camera);
-            m_tutorialText.Position = Game.ScreenManager.Camera.Position;
-            m_tutorialText.Y -= 200f;
+            _tutorialText.Position = Game.ScreenManager.Camera.Position;
+            _tutorialText.Y -= 200f;
             camera.GraphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
-            m_tutorialText.Draw(camera);
-            m_creditsText.Draw(camera);
-            m_creditsTitleText.Draw(camera);
+            _tutorialText.Draw(camera);
+            _creditsText.Draw(camera);
+            _creditsTitleText.Draw(camera);
             camera.GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
+
         }
 
         public override void Dispose() {
-            if (!base.IsDisposed) {
-                m_tutorialText.Dispose();
-                m_tutorialText = null;
-                m_waypointList.Clear();
-                m_waypointList = null;
-                m_creditsText.Dispose();
-                m_creditsText = null;
-                m_creditsTitleText.Dispose();
-                m_creditsTitleText = null;
-                Array.Clear(m_tutorialTextList, 0, m_tutorialTextList.Length);
-                Array.Clear(m_tutorialControllerTextList, 0, m_tutorialControllerTextList.Length);
-                Array.Clear(m_creditsTextTitleList, 0, m_creditsTextTitleList.Length);
-                Array.Clear(m_creditsTextList, 0, m_creditsTextList.Length);
-                m_tutorialTextList = null;
-                m_creditsTextTitleList = null;
-                m_creditsTextList = null;
-                m_tutorialControllerTextList = null;
-                m_door = null;
-                m_doorSprite = null;
-                m_diary = null;
-                m_speechBubble = null;
+
+            if (!IsDisposed) {
+
+                _tutorialText.Dispose();
+                _tutorialText = null;
+                _waypointList.Clear();
+                _waypointList = null;
+                _creditsText.Dispose();
+                _creditsText = null;
+                _creditsTitleText.Dispose();
+                _creditsTitleText = null;
+                Array.Clear(_tutorialTextList, 0, _tutorialTextList.Length);
+                Array.Clear(_tutorialControllerTextList, 0, _tutorialControllerTextList.Length);
+                Array.Clear(_creditsTextTitleList, 0, _creditsTextTitleList.Length);
+                Array.Clear(_creditsTextList, 0, _creditsTextList.Length);
+                _tutorialTextList = null;
+                _creditsTextTitleList = null;
+                _creditsTextList = null;
+                _tutorialControllerTextList = null;
+                _door = null;
+                _doorSprite = null;
+                _diary = null;
+                _speechBubble = null;
                 base.Dispose();
+
             }
+
         }
 
         protected override GameObj CreateCloneInstance() {
@@ -337,5 +425,7 @@ namespace RogueCastle {
         protected override void FillCloneInstance(object obj) {
             base.FillCloneInstance(obj);
         }
+
     }
+
 }

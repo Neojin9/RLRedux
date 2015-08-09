@@ -4,121 +4,91 @@ using Microsoft.Xna.Framework;
 
 
 namespace RogueCastle {
+
     public class TraitType {
-        public const byte None = 0;
-        public const byte ColorBlind = 1;
-        public const byte Gay = 2;
-        public const byte NearSighted = 3;
-        public const byte FarSighted = 4;
-        public const byte Dyslexia = 5;
-        public const byte Gigantism = 6;
-        public const byte Dwarfism = 7;
-        public const byte Baldness = 8;
-        public const byte Endomorph = 9;
-        public const byte Ectomorph = 10;
-        public const byte Alzheimers = 11;
-        public const byte Dextrocardia = 12;
-        public const byte Tourettes = 13;
-        public const byte Hyperactive = 14;
-        public const byte OCD = 15;
-        public const byte Hypergonadism = 16;
-        public const byte Hypogonadism = 17;
-        public const byte StereoBlind = 18;
-        public const byte IBS = 19;
-        public const byte Vertigo = 20;
-        public const byte TunnelVision = 21;
-        public const byte Ambilevous = 22;
-        public const byte PAD = 23;
-        public const byte Alektorophobia = 24;
-        public const byte Hypochondriac = 25;
-        public const byte Dementia = 26;
-        public const byte Hypermobility = 27;
-        public const byte EideticMemory = 28;
-        public const byte Nostalgic = 29;
-        public const byte CIP = 30;
-        public const byte Savant = 31;
-        public const byte TheOne = 32;
-        public const byte NoFurniture = 33;
-        public const byte PlatformsOpen = 34;
-        public const byte Glaucoma = 35;
-        public const byte Total = 36;
-        public const byte Adopted = 100;
+
+        public const byte None           =   0;
+        public const byte ColorBlind     =   1;
+        public const byte Gay            =   2;
+        public const byte NearSighted    =   3;
+        public const byte FarSighted     =   4;
+        public const byte Dyslexia       =   5;
+        public const byte Gigantism      =   6;
+        public const byte Dwarfism       =   7;
+        public const byte Baldness       =   8;
+        public const byte Endomorph      =   9;
+        public const byte Ectomorph      =  10;
+        public const byte Alzheimers     =  11;
+        public const byte Dextrocardia   =  12;
+        public const byte Tourettes      =  13;
+        public const byte Hyperactive    =  14;
+        public const byte OCD            =  15;
+        public const byte Hypergonadism  =  16;
+        public const byte Hypogonadism   =  17;
+        public const byte StereoBlind    =  18;
+        public const byte IBS            =  19;
+        public const byte Vertigo        =  20;
+        public const byte TunnelVision   =  21;
+        public const byte Ambilevous     =  22;
+        public const byte PAD            =  23;
+        public const byte Alektorophobia =  24;
+        public const byte Hypochondriac  =  25;
+        public const byte Dementia       =  26;
+        public const byte Hypermobility  =  27;
+        public const byte EideticMemory  =  28;
+        public const byte Nostalgic      =  29;
+        public const byte CIP            =  30;
+        public const byte Savant         =  31;
+        public const byte TheOne         =  32;
+        public const byte NoFurniture    =  33;
+        public const byte PlatformsOpen  =  34;
+        public const byte Glaucoma       =  35;
+        public const byte Total          =  36;
+        public const byte Adopted        = 100;
 
         public static byte Rarity(byte traitType) {
+
             switch (traitType) {
-                case 1:
-                    return 2;
-                case 2:
-                    return 1;
-                case 3:
-                    return 2;
-                case 4:
-                    return 3;
-                case 5:
-                    return 3;
-                case 6:
-                    return 1;
-                case 7:
-                    return 1;
-                case 8:
-                    return 1;
-                case 9:
-                    return 1;
-                case 10:
-                    return 2;
-                case 11:
-                    return 3;
-                case 12:
-                    return 2;
-                case 13:
-                    return 1;
-                case 14:
-                    return 1;
-                case 15:
-                    return 1;
-                case 16:
-                    return 1;
-                case 17:
-                    return 3;
-                case 18:
-                    return 1;
-                case 19:
-                    return 2;
-                case 20:
-                    return 3;
-                case 21:
-                    return 2;
-                case 22:
-                    return 2;
-                case 23:
-                    return 2;
-                case 24:
-                    return 2;
-                case 25:
-                    return 3;
-                case 26:
-                    return 3;
-                case 27:
-                    return 2;
-                case 28:
-                    return 2;
-                case 29:
-                    return 3;
-                case 30:
-                    return 3;
-                case 31:
-                    return 2;
-                case 32:
-                    return 3;
-                case 33:
-                    return 2;
-                case 34:
-                    return 2;
-                case 35:
-                    return 2;
-                default:
-                    return 0;
+
+                case  1: return 2;
+                case  2: return 1;
+                case  3: return 2;
+                case  4: return 3;
+                case  5: return 3;
+                case  6: return 1;
+                case  7: return 1;
+                case  8: return 1;
+                case  9: return 1;
+                case 10: return 2;
+                case 11: return 3;
+                case 12: return 2;
+                case 13: return 1;
+                case 14: return 1;
+                case 15: return 1;
+                case 16: return 1;
+                case 17: return 3;
+                case 18: return 1;
+                case 19: return 2;
+                case 20: return 3;
+                case 21: return 2;
+                case 22: return 2;
+                case 23: return 2;
+                case 24: return 2;
+                case 25: return 3;
+                case 26: return 3;
+                case 27: return 2;
+                case 28: return 2;
+                case 29: return 3;
+                case 30: return 3;
+                case 31: return 2;
+                case 32: return 3;
+                case 33: return 2;
+                case 34: return 2;
+                case 35: return 2;
+                default: return 0;
+
             }
+
         }
 
         public static string ToString(byte traitType) {
@@ -418,18 +388,28 @@ namespace RogueCastle {
         }
 
         public static bool TraitConflict(Vector2 traits) {
+
             bool result = false;
+            
             if ((traits.X == 16f && traits.Y == 17f) || (traits.X == 17f && traits.Y == 16f))
                 result = true;
+            
             if ((traits.X == 9f && traits.Y == 10f) || (traits.X == 10f && traits.Y == 9f))
                 result = true;
+            
             if ((traits.X == 6f && traits.Y == 7f) || (traits.X == 7f && traits.Y == 6f))
                 result = true;
+            
             if ((traits.X == 3f && traits.Y == 4f) || (traits.X == 4f && traits.Y == 3f))
                 result = true;
+            
             if ((traits.X == 1f && traits.Y == 29f) || (traits.X == 29f && traits.Y == 1f))
                 result = true;
+            
             return result;
+
         }
+
     }
+
 }

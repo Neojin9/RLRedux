@@ -5,6 +5,7 @@ using DS2DEngine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Storage;
 using Tweener;
+using XnaModded;
 
 
 namespace RogueCastle {
@@ -23,8 +24,8 @@ namespace RogueCastle {
 
         private int _saveFailCounter;
 
-        private StorageContainer _storageContainer;
-        private StorageContainer _modStorageContainer;
+        private StorageContainerMod _rogueLegacyStorageContainer;
+        private StorageContainer    _rlReduxStorageContainer;
 
         public SaveGameManager(Game game) {
 
@@ -44,17 +45,17 @@ namespace RogueCastle {
                 _fileNameLineage  = "RogueLegacyDemoLineage.rcdat";
             }
 
-            if (_storageContainer != null) {
+            if (_rogueLegacyStorageContainer != null) {
 
-                _storageContainer.Dispose();
-                _storageContainer = null;
+                _rogueLegacyStorageContainer.Dispose();
+                _rogueLegacyStorageContainer = null;
 
             }
 
-            if (_modStorageContainer != null) {
+            if (_rlReduxStorageContainer != null) {
 
-                _modStorageContainer.Dispose();
-                _modStorageContainer = null;
+                _rlReduxStorageContainer.Dispose();
+                _rlReduxStorageContainer = null;
 
             }
 
@@ -64,15 +65,15 @@ namespace RogueCastle {
 
         private void GetStorageContainer() {
 
-            if (_storageContainer == null || _storageContainer.IsDisposed || _modStorageContainer == null || _modStorageContainer.IsDisposed) {
+            if (_rlReduxStorageContainer == null || _rlReduxStorageContainer.IsDisposed) {
 
-                IAsyncResult asyncResult = StorageDevice.BeginShowSelector(null, null);
+                IAsyncResult asyncResult = StorageDeviceMod.BeginShowSelector(null, null);
                 asyncResult.AsyncWaitHandle.WaitOne();
-                StorageDevice storageDevice = StorageDevice.EndShowSelector(asyncResult);
+                StorageDeviceMod storageDeviceMod = StorageDeviceMod.EndShowSelector(asyncResult);
                 asyncResult.AsyncWaitHandle.Close();
-                asyncResult = storageDevice.BeginOpenContainer("RogueLegacyStorageContainer", null, null);
+                asyncResult = storageDeviceMod.BeginOpenContainer("RogueLegacyStorageContainer", null, null);
                 asyncResult.AsyncWaitHandle.WaitOne();
-                _storageContainer = storageDevice.EndOpenContainer(asyncResult);
+                _rogueLegacyStorageContainer = storageDeviceMod.EndOpenContainer(asyncResult);
                 asyncResult.AsyncWaitHandle.Close();
 
                 IAsyncResult modAsyncResult = StorageDevice.BeginShowSelector(null, null);
@@ -81,7 +82,7 @@ namespace RogueCastle {
                 modAsyncResult.AsyncWaitHandle.Close();
                 modAsyncResult = modStorageDevice.BeginOpenContainer("RLReduxStorageContainer", null, null);
                 modAsyncResult.AsyncWaitHandle.WaitOne();
-                _modStorageContainer = modStorageDevice.EndOpenContainer(modAsyncResult);
+                _rlReduxStorageContainer = modStorageDevice.EndOpenContainer(modAsyncResult);
                 modAsyncResult.AsyncWaitHandle.Close();
 
             }
@@ -92,48 +93,93 @@ namespace RogueCastle {
 
             GetStorageContainer();
 
-            if (!_storageContainer.DirectoryExists("Profile1")) {
-
-                _storageContainer.CreateDirectory("Profile1");
-                CopyFile(_storageContainer, _fileNamePlayer, "Profile1");
-                CopyFile(_storageContainer, "AutoSave_" + _fileNamePlayer, "Profile1");
-                CopyFile(_storageContainer, _fileNameUpgrades, "Profile1");
-                CopyFile(_storageContainer, "AutoSave_" + _fileNameUpgrades, "Profile1");
-                CopyFile(_storageContainer, _fileNameMap, "Profile1");
-                CopyFile(_storageContainer, "AutoSave_" + _fileNameMap, "Profile1");
-                CopyFile(_storageContainer, _fileNameMapData, "Profile1");
-                CopyFile(_storageContainer, "AutoSave_" + _fileNameMapData, "Profile1");
-                CopyFile(_storageContainer, _fileNameLineage, "Profile1");
-                CopyFile(_storageContainer, "AutoSave_" + _fileNameLineage, "Profile1");
-                
-            }
-
-            if (!_storageContainer.DirectoryExists("Profile2"))
-                _storageContainer.CreateDirectory("Profile2");
-
-            if (!_storageContainer.DirectoryExists("Profile3"))
-                _storageContainer.CreateDirectory("Profile3");
+//            if (_rlReduxStorageContainer.DirectoryExists("Profile1")) {
+//
+//                _rlReduxStorageContainer.CreateDirectory("Profile1");
+//
+//                if (_rogueLegacyStorageContainer.DirectoryExists("Profile1")) {
+//
+//                    CopyFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, _fileNamePlayer, "Profile1");
+//                    CopyFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, "AutoSave_" + _fileNamePlayer, "Profile1");
+//                    CopyFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, _fileNameUpgrades, "Profile1");
+//                    CopyFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, "AutoSave_" + _fileNameUpgrades, "Profile1");
+//                    CopyFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, _fileNameMap, "Profile1");
+//                    CopyFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, "AutoSave_" + _fileNameMap, "Profile1");
+//                    CopyFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, _fileNameMapData, "Profile1");
+//                    CopyFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, "AutoSave_" + _fileNameMapData, "Profile1");
+//                    CopyFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, _fileNameLineage, "Profile1");
+//                    CopyFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, "AutoSave_" + _fileNameLineage, "Profile1");
+//
+//                }
+//                
+//            }
+//
+//            if (!_rlReduxStorageContainer.DirectoryExists("Profile2")) {
+//
+//                _rlReduxStorageContainer.CreateDirectory("Profile2");
+//
+//                if (_rogueLegacyStorageContainer.DirectoryExists("Profile2")) {
+//
+//                    CopyFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, _fileNamePlayer, "Profile2");
+//                    CopyFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, "AutoSave_" + _fileNamePlayer, "Profile2");
+//                    CopyFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, _fileNameUpgrades, "Profile2");
+//                    CopyFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, "AutoSave_" + _fileNameUpgrades, "Profile2");
+//                    CopyFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, _fileNameMap, "Profile2");
+//                    CopyFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, "AutoSave_" + _fileNameMap, "Profile2");
+//                    CopyFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, _fileNameMapData, "Profile2");
+//                    CopyFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, "AutoSave_" + _fileNameMapData, "Profile2");
+//                    CopyFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, _fileNameLineage, "Profile2");
+//                    CopyFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, "AutoSave_" + _fileNameLineage, "Profile2");
+//
+//                }
+//                
+//            }
+//
+//            if (!_rlReduxStorageContainer.DirectoryExists("Profile3")) {
+//
+//                _rlReduxStorageContainer.CreateDirectory("Profile3");
+//
+//                if (_rogueLegacyStorageContainer.DirectoryExists("Profile3")) {
+//
+//                    CopyFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, _fileNamePlayer, "Profile3");
+//                    CopyFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, "AutoSave_" + _fileNamePlayer, "Profile3");
+//                    CopyFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, _fileNameUpgrades, "Profile3");
+//                    CopyFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, "AutoSave_" + _fileNameUpgrades, "Profile3");
+//                    CopyFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, _fileNameMap, "Profile3");
+//                    CopyFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, "AutoSave_" + _fileNameMap, "Profile3");
+//                    CopyFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, _fileNameMapData, "Profile3");
+//                    CopyFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, "AutoSave_" + _fileNameMapData, "Profile3");
+//                    CopyFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, _fileNameLineage, "Profile3");
+//                    CopyFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, "AutoSave_" + _fileNameLineage, "Profile3");
+//
+//                }
+//                
+//            }
 
             for (int i = 1; i < 4; i++) {
 
                 string profile = "Profile" + i.ToString();
 
-                if (!_modStorageContainer.DirectoryExists(profile)) {
+                if (!_rlReduxStorageContainer.DirectoryExists(profile)) {
 
-                    _modStorageContainer.CreateDirectory(profile);
+                    Console.WriteLine("Creating Directory: " + profile);
 
-                    if (_storageContainer.DirectoryExists(profile)) {
+                    _rlReduxStorageContainer.CreateDirectory(profile);
 
-                        CopyFileToModFile(_storageContainer, _modStorageContainer, _fileNamePlayer, profile);
-                        CopyFileToModFile(_storageContainer, _modStorageContainer, "AutoSave_" + _fileNamePlayer, profile);
-                        CopyFileToModFile(_storageContainer, _modStorageContainer, _fileNameUpgrades, profile);
-                        CopyFileToModFile(_storageContainer, _modStorageContainer, "AutoSave_" + _fileNameUpgrades, profile);
-                        CopyFileToModFile(_storageContainer, _modStorageContainer, _fileNameMap, profile);
-                        CopyFileToModFile(_storageContainer, _modStorageContainer, "AutoSave_" + _fileNameMap, profile);
-                        CopyFileToModFile(_storageContainer, _modStorageContainer, _fileNameMapData, profile);
-                        CopyFileToModFile(_storageContainer, _modStorageContainer, "AutoSave_" + _fileNameMapData, profile);
-                        CopyFileToModFile(_storageContainer, _modStorageContainer, _fileNameLineage, profile);
-                        CopyFileToModFile(_storageContainer, _modStorageContainer, "AutoSave_" + _fileNameLineage, profile);
+                    if (_rogueLegacyStorageContainer.DirectoryExists(profile)) {
+
+                        Console.WriteLine("Copying files from RogueLegacy folder for profile: " + i);
+
+                        CopyFileToModFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, _fileNamePlayer, profile);
+                        CopyFileToModFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, "AutoSave_" + _fileNamePlayer, profile);
+                        CopyFileToModFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, _fileNameUpgrades, profile);
+                        CopyFileToModFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, "AutoSave_" + _fileNameUpgrades, profile);
+                        CopyFileToModFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, _fileNameMap, profile);
+                        CopyFileToModFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, "AutoSave_" + _fileNameMap, profile);
+                        CopyFileToModFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, _fileNameMapData, profile);
+                        CopyFileToModFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, "AutoSave_" + _fileNameMapData, profile);
+                        CopyFileToModFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, _fileNameLineage, profile);
+                        CopyFileToModFile(_rogueLegacyStorageContainer, _rlReduxStorageContainer, "AutoSave_" + _fileNameLineage, profile);
 
                     }
 
@@ -141,18 +187,25 @@ namespace RogueCastle {
 
             }
 
-            _storageContainer.Dispose();
-            _storageContainer = null;
+            _rogueLegacyStorageContainer.Dispose();
+            _rogueLegacyStorageContainer = null;
 
-            _modStorageContainer.Dispose();
-            _modStorageContainer = null;
+            _rlReduxStorageContainer.Dispose();
+            _rlReduxStorageContainer = null;
 
         }
 
-        private void CopyFileToModFile(StorageContainer originalContainer, StorageContainer modContainer, string fileName, string profileName) {
+        private void CopyFileToModFile(StorageContainerMod originalContainer, StorageContainer modContainer, string fileName, string profileName) {
             
-            if (originalContainer.FileExists(fileName)) {
-                
+            Console.WriteLine("Display Name: " + originalContainer.DisplayName);
+            Console.WriteLine(originalContainer.GetDirectoryNames());
+            Console.WriteLine(originalContainer.GetFileNames());
+            Console.WriteLine("Root Path: " + originalContainer.RootPath);
+
+            if (originalContainer.FileExists(profileName + "/" + fileName)) {
+
+                Console.WriteLine("File to copy exists");
+
                 Stream originalFile = originalContainer.OpenFile(profileName + "/" + fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
                 Stream modFile = modContainer.CreateFile(profileName + "/" + fileName);
 
@@ -164,15 +217,16 @@ namespace RogueCastle {
 
         }
 
-        private void CopyFile(StorageContainer storageContainer, string fileName, string profileName) {
-            
-            if (storageContainer.FileExists(fileName)) {
+        private void CopyFile(StorageContainerMod originContainer, StorageContainer destinationContainer, string fileName, string profileName) {
 
-                Stream stream = storageContainer.OpenFile(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
-                Stream stream2 = storageContainer.CreateFile(profileName + "/" + fileName);
-                stream.CopyTo(stream2);
-                stream.Close();
-                stream2.Close();
+            if (originContainer.FileExists(fileName)) {
+
+                Stream originFile = originContainer.OpenFile(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
+                Stream destinationFile = destinationContainer.CreateFile(profileName + "/" + fileName);
+                
+                originFile.CopyTo(destinationFile);
+                originFile.Close();
+                destinationFile.Close();
 
             }
 
@@ -213,10 +267,10 @@ namespace RogueCastle {
 
                 } finally {
 
-                    if (_modStorageContainer != null && !_modStorageContainer.IsDisposed)
-                        _modStorageContainer.Dispose();
+                    if (_rlReduxStorageContainer != null && !_rlReduxStorageContainer.IsDisposed)
+                        _rlReduxStorageContainer.Dispose();
 
-                    _modStorageContainer = null;
+                    _rlReduxStorageContainer = null;
 
                 }
 
@@ -235,8 +289,8 @@ namespace RogueCastle {
                     SaveData(saveType, true);
                 }
 
-                _modStorageContainer.Dispose();
-                _modStorageContainer = null;
+                _rlReduxStorageContainer.Dispose();
+                _rlReduxStorageContainer = null;
 
             }
 
@@ -317,8 +371,8 @@ namespace RogueCastle {
 
                 } finally {
 
-                    if (_modStorageContainer != null && !_modStorageContainer.IsDisposed)
-                        _modStorageContainer.Dispose();
+                    if (_rlReduxStorageContainer != null && !_rlReduxStorageContainer.IsDisposed)
+                        _rlReduxStorageContainer.Dispose();
 
                 }
 
@@ -333,8 +387,8 @@ namespace RogueCastle {
                     LoadData(loadType, level);
                 }
 
-                _modStorageContainer.Dispose();
-                _modStorageContainer = null;
+                _rlReduxStorageContainer.Dispose();
+                _rlReduxStorageContainer = null;
 
             }
 
@@ -342,8 +396,8 @@ namespace RogueCastle {
 
         public void ForceBackup() {
 
-            if (_modStorageContainer != null && !_modStorageContainer.IsDisposed)
-                _modStorageContainer.Dispose();
+            if (_rlReduxStorageContainer != null && !_rlReduxStorageContainer.IsDisposed)
+                _rlReduxStorageContainer.Dispose();
             
             RCScreenManager screenManager = Game.ScreenManager;
             screenManager.DialogueScreen.SetDialogue("Save File Error");
@@ -401,8 +455,8 @@ namespace RogueCastle {
                 DeleteData(deleteType);
             }
 
-            _modStorageContainer.Dispose();
-            _modStorageContainer = null;
+            _rlReduxStorageContainer.Dispose();
+            _rlReduxStorageContainer = null;
 
         }
 
@@ -415,8 +469,8 @@ namespace RogueCastle {
                 DeleteBackupData(deleteType);
             }
 
-            _modStorageContainer.Dispose();
-            _modStorageContainer = null;
+            _rlReduxStorageContainer.Dispose();
+            _rlReduxStorageContainer = null;
 
         }
 
@@ -451,13 +505,13 @@ namespace RogueCastle {
             switch (deleteType) {
 
                 case SaveType.PlayerData:
-                    if (_modStorageContainer.FileExists(string.Concat(new object[] {
+                    if (_rlReduxStorageContainer.FileExists(string.Concat(new object[] {
                         "Profile",
                         Game.GameConfig.ProfileSlot,
                         "/",
                         _fileNamePlayer
                     }))) {
-                        _modStorageContainer.DeleteFile(string.Concat(new object[] {
+                        _rlReduxStorageContainer.DeleteFile(string.Concat(new object[] {
                             "Profile",
                             Game.GameConfig.ProfileSlot,
                             "/",
@@ -468,13 +522,13 @@ namespace RogueCastle {
                     break;
 
                 case SaveType.UpgradeData:
-                    if (_modStorageContainer.FileExists(string.Concat(new object[] {
+                    if (_rlReduxStorageContainer.FileExists(string.Concat(new object[] {
                         "Profile",
                         Game.GameConfig.ProfileSlot,
                         "/",
                         _fileNameUpgrades
                     }))) {
-                        _modStorageContainer.DeleteFile(string.Concat(new object[] {
+                        _rlReduxStorageContainer.DeleteFile(string.Concat(new object[] {
                             "Profile",
                             Game.GameConfig.ProfileSlot,
                             "/",
@@ -485,13 +539,13 @@ namespace RogueCastle {
                     break;
 
                 case SaveType.Map:
-                    if (_modStorageContainer.FileExists(string.Concat(new object[] {
+                    if (_rlReduxStorageContainer.FileExists(string.Concat(new object[] {
                         "Profile",
                         Game.GameConfig.ProfileSlot,
                         "/",
                         _fileNameMap
                     }))) {
-                        _modStorageContainer.DeleteFile(string.Concat(new object[] {
+                        _rlReduxStorageContainer.DeleteFile(string.Concat(new object[] {
                             "Profile",
                             Game.GameConfig.ProfileSlot,
                             "/",
@@ -502,13 +556,13 @@ namespace RogueCastle {
                     break;
 
                 case SaveType.MapData:
-                    if (_modStorageContainer.FileExists(string.Concat(new object[] {
+                    if (_rlReduxStorageContainer.FileExists(string.Concat(new object[] {
                         "Profile",
                         Game.GameConfig.ProfileSlot,
                         "/",
                         _fileNameMapData
                     }))) {
-                        _modStorageContainer.DeleteFile(string.Concat(new object[] {
+                        _rlReduxStorageContainer.DeleteFile(string.Concat(new object[] {
                             "Profile",
                             Game.GameConfig.ProfileSlot,
                             "/",
@@ -519,13 +573,13 @@ namespace RogueCastle {
                     break;
 
                 case SaveType.Lineage:
-                    if (_modStorageContainer.FileExists(string.Concat(new object[] {
+                    if (_rlReduxStorageContainer.FileExists(string.Concat(new object[] {
                         "Profile",
                         Game.GameConfig.ProfileSlot,
                         "/",
                         _fileNameLineage
                     }))) {
-                        _modStorageContainer.DeleteFile(string.Concat(new object[] {
+                        _rlReduxStorageContainer.DeleteFile(string.Concat(new object[] {
                             "Profile",
                             Game.GameConfig.ProfileSlot,
                             "/",
@@ -546,13 +600,13 @@ namespace RogueCastle {
             switch (deleteType) {
 
                 case SaveType.PlayerData:
-                    if (_modStorageContainer.FileExists(string.Concat(new object[] {
+                    if (_rlReduxStorageContainer.FileExists(string.Concat(new object[] {
                         "Profile",
                         Game.GameConfig.ProfileSlot,
                         "/AutoSave_",
                         _fileNamePlayer
                     }))) {
-                        _modStorageContainer.DeleteFile(string.Concat(new object[] {
+                        _rlReduxStorageContainer.DeleteFile(string.Concat(new object[] {
                             "Profile",
                             Game.GameConfig.ProfileSlot,
                             "/AutoSave_",
@@ -563,13 +617,13 @@ namespace RogueCastle {
                     break;
 
                 case SaveType.UpgradeData:
-                    if (_modStorageContainer.FileExists(string.Concat(new object[] {
+                    if (_rlReduxStorageContainer.FileExists(string.Concat(new object[] {
                         "Profile",
                         Game.GameConfig.ProfileSlot,
                         "/AutoSave_",
                         _fileNameUpgrades
                     }))) {
-                        _modStorageContainer.DeleteFile(string.Concat(new object[] {
+                        _rlReduxStorageContainer.DeleteFile(string.Concat(new object[] {
                             "Profile",
                             Game.GameConfig.ProfileSlot,
                             "/AutoSave_",
@@ -580,13 +634,13 @@ namespace RogueCastle {
                     break;
 
                 case SaveType.Map:
-                    if (_modStorageContainer.FileExists(string.Concat(new object[] {
+                    if (_rlReduxStorageContainer.FileExists(string.Concat(new object[] {
                         "Profile",
                         Game.GameConfig.ProfileSlot,
                         "/AutoSave_",
                         _fileNameMap
                     }))) {
-                        _modStorageContainer.DeleteFile(string.Concat(new object[] {
+                        _rlReduxStorageContainer.DeleteFile(string.Concat(new object[] {
                             "Profile",
                             Game.GameConfig.ProfileSlot,
                             "/AutoSave_",
@@ -597,13 +651,13 @@ namespace RogueCastle {
                     break;
 
                 case SaveType.MapData:
-                    if (_modStorageContainer.FileExists(string.Concat(new object[] {
+                    if (_rlReduxStorageContainer.FileExists(string.Concat(new object[] {
                         "Profile",
                         Game.GameConfig.ProfileSlot,
                         "/AutoSave_",
                         _fileNameMapData
                     }))) {
-                        _modStorageContainer.DeleteFile(string.Concat(new object[] {
+                        _rlReduxStorageContainer.DeleteFile(string.Concat(new object[] {
                             "Profile",
                             Game.GameConfig.ProfileSlot,
                             "/AutoSave_",
@@ -614,13 +668,13 @@ namespace RogueCastle {
                     break;
 
                 case SaveType.Lineage:
-                    if (_modStorageContainer.FileExists(string.Concat(new object[] {
+                    if (_rlReduxStorageContainer.FileExists(string.Concat(new object[] {
                         "Profile",
                         Game.GameConfig.ProfileSlot,
                         "/AutoSave_",
                         _fileNameLineage
                     }))) {
-                        _modStorageContainer.DeleteFile(string.Concat(new object[] {
+                        _rlReduxStorageContainer.DeleteFile(string.Concat(new object[] {
                             "Profile",
                             Game.GameConfig.ProfileSlot,
                             "/AutoSave_",
@@ -642,24 +696,24 @@ namespace RogueCastle {
             
             GetStorageContainer();
             
-            if (_modStorageContainer.FileExists(string.Concat(new object[] {
+            if (_rlReduxStorageContainer.FileExists(string.Concat(new object[] {
                 "Profile",
                 Game.GameConfig.ProfileSlot,
                 "/AutoSave_",
                 _fileNamePlayer
-            })) && _modStorageContainer.FileExists(string.Concat(new object[] {
+            })) && _rlReduxStorageContainer.FileExists(string.Concat(new object[] {
                 "Profile",
                 Game.GameConfig.ProfileSlot,
                 "/",
                 _fileNamePlayer
             }))) {
-                Stream stream = _modStorageContainer.OpenFile(string.Concat(new object[] {
+                Stream stream = _rlReduxStorageContainer.OpenFile(string.Concat(new object[] {
                     "Profile",
                     Game.GameConfig.ProfileSlot,
                     "/AutoSave_",
                     _fileNamePlayer
                 }), FileMode.Open);
-                Stream stream2 = _modStorageContainer.CreateFile(string.Concat(new object[] {
+                Stream stream2 = _rlReduxStorageContainer.CreateFile(string.Concat(new object[] {
                     "Profile",
                     Game.GameConfig.ProfileSlot,
                     "/",
@@ -670,24 +724,24 @@ namespace RogueCastle {
                 stream2.Close();
             }
 
-            if (_modStorageContainer.FileExists(string.Concat(new object[] {
+            if (_rlReduxStorageContainer.FileExists(string.Concat(new object[] {
                 "Profile",
                 Game.GameConfig.ProfileSlot,
                 "/AutoSave_",
                 _fileNameUpgrades
-            })) && _modStorageContainer.FileExists(string.Concat(new object[] {
+            })) && _rlReduxStorageContainer.FileExists(string.Concat(new object[] {
                 "Profile",
                 Game.GameConfig.ProfileSlot,
                 "/",
                 _fileNameUpgrades
             }))) {
-                Stream stream3 = _modStorageContainer.OpenFile(string.Concat(new object[] {
+                Stream stream3 = _rlReduxStorageContainer.OpenFile(string.Concat(new object[] {
                     "Profile",
                     Game.GameConfig.ProfileSlot,
                     "/AutoSave_",
                     _fileNameUpgrades
                 }), FileMode.Open);
-                Stream stream4 = _modStorageContainer.CreateFile(string.Concat(new object[] {
+                Stream stream4 = _rlReduxStorageContainer.CreateFile(string.Concat(new object[] {
                     "Profile",
                     Game.GameConfig.ProfileSlot,
                     "/",
@@ -698,24 +752,24 @@ namespace RogueCastle {
                 stream4.Close();
             }
 
-            if (_modStorageContainer.FileExists(string.Concat(new object[] {
+            if (_rlReduxStorageContainer.FileExists(string.Concat(new object[] {
                 "Profile",
                 Game.GameConfig.ProfileSlot,
                 "/AutoSave_",
                 _fileNameMap
-            })) && _modStorageContainer.FileExists(string.Concat(new object[] {
+            })) && _rlReduxStorageContainer.FileExists(string.Concat(new object[] {
                 "Profile",
                 Game.GameConfig.ProfileSlot,
                 "/",
                 _fileNameMap
             }))) {
-                Stream stream5 = _modStorageContainer.OpenFile(string.Concat(new object[] {
+                Stream stream5 = _rlReduxStorageContainer.OpenFile(string.Concat(new object[] {
                     "Profile",
                     Game.GameConfig.ProfileSlot,
                     "/AutoSave_",
                     _fileNameMap
                 }), FileMode.Open);
-                Stream stream6 = _modStorageContainer.CreateFile(string.Concat(new object[] {
+                Stream stream6 = _rlReduxStorageContainer.CreateFile(string.Concat(new object[] {
                     "Profile",
                     Game.GameConfig.ProfileSlot,
                     "/",
@@ -726,24 +780,24 @@ namespace RogueCastle {
                 stream6.Close();
             }
 
-            if (_modStorageContainer.FileExists(string.Concat(new object[] {
+            if (_rlReduxStorageContainer.FileExists(string.Concat(new object[] {
                 "Profile",
                 Game.GameConfig.ProfileSlot,
                 "/AutoSave_",
                 _fileNameMapData
-            })) && _modStorageContainer.FileExists(string.Concat(new object[] {
+            })) && _rlReduxStorageContainer.FileExists(string.Concat(new object[] {
                 "Profile",
                 Game.GameConfig.ProfileSlot,
                 "/",
                 _fileNameMapData
             }))) {
-                Stream stream7 = _modStorageContainer.OpenFile(string.Concat(new object[] {
+                Stream stream7 = _rlReduxStorageContainer.OpenFile(string.Concat(new object[] {
                     "Profile",
                     Game.GameConfig.ProfileSlot,
                     "/AutoSave_",
                     _fileNameMapData
                 }), FileMode.Open);
-                Stream stream8 = _modStorageContainer.CreateFile(string.Concat(new object[] {
+                Stream stream8 = _rlReduxStorageContainer.CreateFile(string.Concat(new object[] {
                     "Profile",
                     Game.GameConfig.ProfileSlot,
                     "/",
@@ -754,24 +808,24 @@ namespace RogueCastle {
                 stream8.Close();
             }
 
-            if (_modStorageContainer.FileExists(string.Concat(new object[] {
+            if (_rlReduxStorageContainer.FileExists(string.Concat(new object[] {
                 "Profile",
                 Game.GameConfig.ProfileSlot,
                 "/AutoSave_",
                 _fileNameLineage
-            })) && _modStorageContainer.FileExists(string.Concat(new object[] {
+            })) && _rlReduxStorageContainer.FileExists(string.Concat(new object[] {
                 "Profile",
                 Game.GameConfig.ProfileSlot,
                 "/",
                 _fileNameLineage
             }))) {
-                Stream stream9 = _modStorageContainer.OpenFile(string.Concat(new object[] {
+                Stream stream9 = _rlReduxStorageContainer.OpenFile(string.Concat(new object[] {
                     "Profile",
                     Game.GameConfig.ProfileSlot,
                     "/AutoSave_",
                     _fileNameLineage
                 }), FileMode.Open);
-                Stream stream10 = _modStorageContainer.CreateFile(string.Concat(new object[] {
+                Stream stream10 = _rlReduxStorageContainer.CreateFile(string.Concat(new object[] {
                     "Profile",
                     Game.GameConfig.ProfileSlot,
                     "/",
@@ -783,8 +837,8 @@ namespace RogueCastle {
             }
 
             _autosaveLoaded      = true;
-            _modStorageContainer.Dispose();
-            _modStorageContainer = null;
+            _rlReduxStorageContainer.Dispose();
+            _rlReduxStorageContainer = null;
 
         }
 
@@ -821,7 +875,7 @@ namespace RogueCastle {
             
             text = text.Insert(0, "Profile" + Game.GameConfig.ProfileSlot + "/");
 
-            using (Stream stream = _modStorageContainer.CreateFile(text)) {
+            using (Stream stream = _rlReduxStorageContainer.CreateFile(text)) {
 
                 using (BinaryWriter binaryWriter = new BinaryWriter(stream)) {
 
@@ -1069,7 +1123,7 @@ namespace RogueCastle {
             
             text = text.Insert(0, "Profile" + Game.GameConfig.ProfileSlot + "/");
 
-            using (Stream stream = _modStorageContainer.CreateFile(text)) {
+            using (Stream stream = _rlReduxStorageContainer.CreateFile(text)) {
 
                 using (BinaryWriter binaryWriter = new BinaryWriter(stream)) {
 
@@ -1187,7 +1241,7 @@ namespace RogueCastle {
             
             text = text.Insert(0, "Profile" + Game.GameConfig.ProfileSlot + "/");
 
-            using (Stream stream = _modStorageContainer.CreateFile(text)) {
+            using (Stream stream = _rlReduxStorageContainer.CreateFile(text)) {
 
                 using (BinaryWriter binaryWriter = new BinaryWriter(stream)) {
 
@@ -1305,7 +1359,7 @@ namespace RogueCastle {
             
             text = text.Insert(0, "Profile" + Game.GameConfig.ProfileSlot + "/");
 
-            using (Stream stream = _modStorageContainer.CreateFile(text)) {
+            using (Stream stream = _rlReduxStorageContainer.CreateFile(text)) {
                 
                 using (BinaryWriter binaryWriter = new BinaryWriter(stream)) {
 
@@ -1484,7 +1538,7 @@ namespace RogueCastle {
             
             text = text.Insert(0, "Profile" + Game.GameConfig.ProfileSlot + "/");
 
-            using (Stream stream = _modStorageContainer.CreateFile(text)) {
+            using (Stream stream = _rlReduxStorageContainer.CreateFile(text)) {
 
                 using (BinaryWriter binaryWriter = new BinaryWriter(stream)) {
 
@@ -1647,7 +1701,7 @@ namespace RogueCastle {
 
         private void LoadPlayerData() {
 
-            using (Stream stream = _modStorageContainer.OpenFile(string.Concat(new object[] {
+            using (Stream stream = _rlReduxStorageContainer.OpenFile(string.Concat(new object[] {
                 "Profile",
                 Game.GameConfig.ProfileSlot,
                 "/",
@@ -1892,7 +1946,7 @@ namespace RogueCastle {
 
         private void LoadUpgradeData() {
 
-            using (Stream stream = _modStorageContainer.OpenFile(string.Concat(new object[] {
+            using (Stream stream = _rlReduxStorageContainer.OpenFile(string.Concat(new object[] {
                 "Profile",
                 Game.GameConfig.ProfileSlot,
                 "/",
@@ -2010,7 +2064,7 @@ namespace RogueCastle {
             GetStorageContainer();
             ProceduralLevelScreen proceduralLevelScreen;
 
-            using (Stream stream = _modStorageContainer.OpenFile(string.Concat(new object[] {
+            using (Stream stream = _rlReduxStorageContainer.OpenFile(string.Concat(new object[] {
                 "Profile",
                 Game.GameConfig.ProfileSlot,
                 "/",
@@ -2054,14 +2108,14 @@ namespace RogueCastle {
 
             }
 
-            _modStorageContainer.Dispose();
+            _rlReduxStorageContainer.Dispose();
             return proceduralLevelScreen;
 
         }
 
         private void LoadMapData(ProceduralLevelScreen createdLevel) {
 
-            using (Stream stream = _modStorageContainer.OpenFile(string.Concat(new object[] {
+            using (Stream stream = _rlReduxStorageContainer.OpenFile(string.Concat(new object[] {
                 "Profile",
                 Game.GameConfig.ProfileSlot,
                 "/",
@@ -2230,7 +2284,7 @@ namespace RogueCastle {
 
         private void LoadLineageData() {
 
-            using (Stream stream = _modStorageContainer.OpenFile(string.Concat(new object[] {
+            using (Stream stream = _rlReduxStorageContainer.OpenFile(string.Concat(new object[] {
                 "Profile",
                 Game.GameConfig.ProfileSlot,
                 "/",
@@ -2354,14 +2408,14 @@ namespace RogueCastle {
 
         public bool FileExists(SaveType saveType) {
             
-            bool flag = !(_modStorageContainer != null && !_modStorageContainer.IsDisposed);
+            bool flag = !(_rlReduxStorageContainer != null && !_rlReduxStorageContainer.IsDisposed);
             GetStorageContainer();
             bool result = false;
             
             switch (saveType) {
 
                 case SaveType.PlayerData:
-                    result = _modStorageContainer.FileExists(string.Concat(new object[] {
+                    result = _rlReduxStorageContainer.FileExists(string.Concat(new object[] {
                         "Profile",
                         Game.GameConfig.ProfileSlot,
                         "/",
@@ -2370,7 +2424,7 @@ namespace RogueCastle {
                     break;
 
                 case SaveType.UpgradeData:
-                    result = _modStorageContainer.FileExists(string.Concat(new object[] {
+                    result = _rlReduxStorageContainer.FileExists(string.Concat(new object[] {
                         "Profile",
                         Game.GameConfig.ProfileSlot,
                         "/",
@@ -2379,7 +2433,7 @@ namespace RogueCastle {
                     break;
 
                 case SaveType.Map:
-                    result = _modStorageContainer.FileExists(string.Concat(new object[] {
+                    result = _rlReduxStorageContainer.FileExists(string.Concat(new object[] {
                         "Profile",
                         Game.GameConfig.ProfileSlot,
                         "/",
@@ -2388,7 +2442,7 @@ namespace RogueCastle {
                     break;
 
                 case SaveType.MapData:
-                    result = _modStorageContainer.FileExists(string.Concat(new object[] {
+                    result = _rlReduxStorageContainer.FileExists(string.Concat(new object[] {
                         "Profile",
                         Game.GameConfig.ProfileSlot,
                         "/",
@@ -2397,7 +2451,7 @@ namespace RogueCastle {
                     break;
 
                 case SaveType.Lineage:
-                    result = _modStorageContainer.FileExists(string.Concat(new object[] {
+                    result = _rlReduxStorageContainer.FileExists(string.Concat(new object[] {
                         "Profile",
                         Game.GameConfig.ProfileSlot,
                         "/",
@@ -2408,8 +2462,8 @@ namespace RogueCastle {
             }
 
             if (flag) {
-                _modStorageContainer.Dispose();
-                _modStorageContainer = null;
+                _rlReduxStorageContainer.Dispose();
+                _rlReduxStorageContainer = null;
             }
 
             return result;
@@ -2417,7 +2471,7 @@ namespace RogueCastle {
         }
 
         public StorageContainer GetContainer() {
-            return _modStorageContainer;
+            return _rlReduxStorageContainer;
         }
 
         public void GetSaveHeader(byte profile, out byte playerClass, out string playerName, out int playerLevel, out bool playerIsDead, out int castlesBeaten) {
@@ -2429,14 +2483,14 @@ namespace RogueCastle {
             castlesBeaten = 0;
             GetStorageContainer();
 
-            if (_modStorageContainer.FileExists(string.Concat(new object[] {
+            if (_rlReduxStorageContainer.FileExists(string.Concat(new object[] {
                 "Profile",
                 profile,
                 "/",
                 _fileNamePlayer
             }))) {
 
-                using (Stream stream = _modStorageContainer.OpenFile(string.Concat(new object[] {
+                using (Stream stream = _rlReduxStorageContainer.OpenFile(string.Concat(new object[] {
                     "Profile",
                     profile,
                     "/",
@@ -2499,14 +2553,14 @@ namespace RogueCastle {
 
             }
 
-            if (_modStorageContainer.FileExists(string.Concat(new object[] {
+            if (_rlReduxStorageContainer.FileExists(string.Concat(new object[] {
                 "Profile",
                 profile,
                 "/",
                 _fileNameUpgrades
             }))) {
 
-                using (Stream stream2 = _modStorageContainer.OpenFile(string.Concat(new object[] {
+                using (Stream stream2 = _rlReduxStorageContainer.OpenFile(string.Concat(new object[] {
                     "Profile",
                     profile,
                     "/",
@@ -2550,8 +2604,8 @@ namespace RogueCastle {
 
             }
 
-            _modStorageContainer.Dispose();
-            _modStorageContainer = null;
+            _rlReduxStorageContainer.Dispose();
+            _rlReduxStorageContainer = null;
 
         }
         
